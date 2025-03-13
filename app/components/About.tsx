@@ -2,71 +2,62 @@
 
 import { motion } from "framer-motion";
 import { Button } from "./Button";
-import { HiOutlineChip, HiOutlineLightBulb, HiOutlineScale } from "react-icons/hi";
+import { HiOutlineLightBulb, HiOutlineScale, HiOutlineChip } from "react-icons/hi";
 import { SectionDivider } from "./ui/SectionDivider";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const features = [
   {
-    title: "AI Technology",
-    description: "Powered by cutting-edge artificial intelligence and machine learning algorithms",
-    icon: HiOutlineChip,
-  },
-  {
-    title: "Innovation First",
-    description: "Continuously evolving our solutions to stay ahead of industry needs",
+    title: "Smart Legal Research",
+    description: "AI-powered research assistant that understands context and finds relevant cases instantly.",
     icon: HiOutlineLightBulb,
   },
   {
-    title: "Legal Expertise",
-    description: "Combining technical excellence with deep legal domain knowledge",
+    title: "Automated Document Analysis",
+    description: "Advanced algorithms that review and analyze legal documents with high accuracy.",
     icon: HiOutlineScale,
+  },
+  {
+    title: "Predictive Analytics",
+    description: "Data-driven insights to help make informed decisions and predict case outcomes.",
+    icon: HiOutlineChip,
   },
 ];
 
 export default function About() {
-  return (
-    <section id="about" className="relative py-32 overflow-hidden">
-      {/* Section Dividers */}
-      <SectionDivider type="top" from="from-[#0A0F1C]" to="to-gray-900" className="z-10" />
-      <SectionDivider from="from-gray-900" to="to-primary" className="z-10" />
+  const router = useRouter();
 
-      {/* Background Elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-900 to-primary">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:24px_24px]" />
+  return (
+    <section id="about" className="relative py-20 overflow-hidden">
+      {/* Background with consistent gradient and grid */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0A0F1C] via-[#1C3D5A] to-[#0A192F]">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0F1C] via-transparent to-transparent" />
       </div>
 
-      <div className="absolute right-0 top-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
-      <div className="absolute left-0 bottom-1/4 w-72 h-72 bg-primary/20 rounded-full blur-3xl" />
+      {/* Translucent overlay */}
+      <div className="absolute inset-0 bg-gray-900/50 backdrop-blur-sm" />
 
+      {/* Content */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Text Content */}
+          {/* Left side - Content */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
           >
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="mb-8"
-            >
-              <h2 className="text-4xl md:text-5xl font-poppins font-bold text-white mb-6">
-                Transforming Legal Practice Through{" "}
-                <span className="bg-gradient-to-r from-accent to-accent/70 text-transparent bg-clip-text">
-                  Innovation
-                </span>
-              </h2>
-              <p className="text-lg text-gray-300 mb-8">
-                At Asvara Innovations, we&apos;re pioneering the future of legal technology. Our AI-powered solutions are designed to streamline legal processes, enhance decision-making, and revolutionize how legal professionals work.
-              </p>
-            </motion.div>
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+              Transforming Legal Practice Through Innovation
+            </h2>
+            <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+              We're revolutionizing the legal industry by combining cutting-edge AI technology 
+              with deep legal expertise. Our solutions streamline workflows, enhance decision-making, 
+              and deliver superior results for legal professionals.
+            </p>
 
-            {/* Features Grid */}
             <div className="grid gap-6 mb-8">
               {features.map((feature, index) => (
                 <motion.div
@@ -102,21 +93,21 @@ export default function About() {
                 variant="secondary"
                 size="lg"
                 className="shadow-lg shadow-accent/25 hover:shadow-accent/30 transition-all"
+                onClick={() => router.push('/innovations')}
               >
-                Learn More About Us
+                Explore
               </Button>
             </motion.div>
           </motion.div>
 
-          {/* Image Section */}
+          {/* Right side - Image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="relative lg:h-[600px] rounded-2xl overflow-hidden shadow-2xl"
+            transition={{ duration: 0.6 }}
+            className="relative lg:h-[600px] rounded-2xl overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 mix-blend-overlay" />
             <div className="relative w-full h-full">
               <Image
                 src="/images/about-image.jpg"
@@ -127,18 +118,12 @@ export default function About() {
                 priority
               />
             </div>
-            {/* Decorative Elements */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-8">
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-                <p className="text-white text-lg font-medium">
-                  &ldquo;Transforming the future of legal practice with AI-powered innovation&rdquo;
-                </p>
-              </div>
-            </div>
           </motion.div>
         </div>
       </div>
+
+      {/* Section Divider */}
+      <SectionDivider from="from-[#0A0F1C]" to="to-gray-900" className="z-20" />
     </section>
   );
 } 

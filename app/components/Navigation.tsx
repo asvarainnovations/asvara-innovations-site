@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { HiMenu, HiX } from "react-icons/hi";
+import { Button } from "./Button";
 
 const menuItems = [
   { name: "Home", href: "/" },
@@ -18,10 +20,17 @@ export default function Navigation() {
 
   return (
     <nav className="fixed w-full bg-gray-900/95 backdrop-blur-sm z-50 border-b border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[2000px] mx-auto px-4">
         <div className="flex justify-between items-center h-20">
-          {/* Logo */}
-          <Link href="/" className="flex items-center">
+          {/* Logo and Brand Name */}
+          <Link href="/" className="flex items-center space-x-2">
+            <Image
+              src="/logo.png"
+              alt="Asvara Innovations Logo"
+              width={40}
+              height={30}
+              className="w-auto h-6"
+            />
             <span className="text-2xl font-poppins font-bold text-white">
               Asvara
               <span className="bg-gradient-to-r from-accent to-accent/70 text-transparent bg-clip-text">
@@ -31,7 +40,7 @@ export default function Navigation() {
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-8">
+          <div className="hidden md:flex items-center space-x-8">
             {menuItems.map((item) => (
               <Link
                 key={item.name}
@@ -42,6 +51,13 @@ export default function Navigation() {
                 <span className="absolute inset-x-0 bottom-0 h-0.5 bg-accent scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </Link>
             ))}
+            <Button
+              variant="secondary"
+              size="sm"
+              className="bg-accent hover:bg-accent/90 text-white px-6"
+            >
+              Login
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -79,6 +95,15 @@ export default function Navigation() {
                 {item.name}
               </Link>
             ))}
+            <div className="px-3 py-2">
+              <Button
+                variant="secondary"
+                size="sm"
+                className="w-full bg-accent hover:bg-accent/90 text-white"
+              >
+                Login
+              </Button>
+            </div>
           </div>
         </motion.div>
       )}

@@ -1,13 +1,13 @@
 import emailjs from '@emailjs/browser';
 
 const emailConfig = {
-  serviceId: 'service_bied9pp',
-  templateId: 'template_rox9dta',
-  publicKey: 'TcM8srp88PGMsI-TT',
+  serviceId: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || '',
+  templateId: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || '',
+  publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || '',
 };
 
-// Initialize EmailJS
-if (typeof window !== 'undefined' && emailConfig.publicKey) {
+// Initialize EmailJS only on the client side
+if (typeof window !== 'undefined') {
   emailjs.init(emailConfig.publicKey);
 }
 
