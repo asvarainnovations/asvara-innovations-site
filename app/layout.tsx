@@ -17,8 +17,27 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Asvara Innovations - AI-Driven Legal Tech Solutions",
-  description: "Revolutionizing legal tech with cutting-edge AI solutions for legal professionals, law firms, and enterprises.",
+  title: "Asvara Innovations",
+  description: "Revolutionizing Legal Work with AI Innovation",
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.svg', type: 'image/svg+xml' }
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }
+    ],
+    other: [
+      {
+        rel: 'mask-icon',
+        url: '/safari-pinned-tab.svg',
+        color: '#00A6FB'
+      }
+    ]
+  },
+  manifest: '/site.webmanifest'
 };
 
 export default function RootLayout({

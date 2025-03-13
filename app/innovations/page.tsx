@@ -56,7 +56,7 @@ export default function InnovationsPage() {
               Our Innovations
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Explore our latest technological breakthroughs and discover how we're 
+              Explore our latest technological breakthroughs and discover how we&apos;re 
               revolutionizing the legal industry through AI-powered solutions.
             </p>
           </motion.div>

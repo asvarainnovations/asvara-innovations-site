@@ -83,7 +83,7 @@ export default function Contact() {
           publicKey: emailConfig.publicKey
         }
       ).then(
-        (result) => {
+        () => {
           toast.success('Message sent successfully! We will get back to you soon.', {
             position: 'top-right',
             duration: 5000,

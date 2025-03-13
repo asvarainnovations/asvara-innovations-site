@@ -53,7 +53,7 @@ export default function About() {
               Transforming Legal Practice Through Innovation
             </h2>
             <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-              We're revolutionizing the legal industry by combining cutting-edge AI technology 
+              We&apos;re revolutionizing the legal industry by combining cutting-edge AI technology 
               with deep legal expertise. Our solutions streamline workflows, enhance decision-making, 
               and deliver superior results for legal professionals.
             </p>
