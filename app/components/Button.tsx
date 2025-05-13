@@ -1,38 +1,50 @@
 "use client";
 
 import { ButtonHTMLAttributes, forwardRef } from "react";
+import Link from "next/link";
 import { VariantProps, cva } from "class-variance-authority";
-import { cn } from "../lib/utils";
+import { cn } from "@/app/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
   {
     variants: {
       variant: {
-        default: "bg-primary text-white hover:bg-primary/90",
-        secondary: "bg-accent text-white hover:bg-accent/90",
-        outline: "border-2 border-primary text-primary hover:bg-primary hover:text-white",
-        ghost: "text-primary hover:bg-primary/10",
+        primary: "bg-accent text-white hover:bg-accent/90",
+        secondary: "bg-white/10 text-white hover:bg-white/20",
+        outline: "border-2 border-accent/20 text-white hover:bg-accent/10",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 px-3",
-        lg: "h-11 px-8",
+        sm: "h-9 px-4 text-sm",
+        md: "h-10 px-6",
+        lg: "h-12 px-8 text-lg",
       },
     },
     defaultVariants: {
-      variant: "default",
-      size: "default",
+      variant: "primary",
+      size: "md",
     },
   }
 );
 
 interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
+    VariantProps<typeof buttonVariants> {
+  href?: string;
+}
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, ...props }, ref) => {
+  ({ className, variant, size, href, ...props }, ref) => {
+    if (href) {
+      return (
+        <Link
+          href={href}
+          className={cn(buttonVariants({ variant, size, className }))}
+        >
+          {props.children}
+        </Link>
+      );
+    }
     return (
       <button
         className={cn(buttonVariants({ variant, size, className }))}

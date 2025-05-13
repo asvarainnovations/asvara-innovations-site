@@ -1,0 +1,43 @@
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import prisma from '@/lib/prismadb';
+
+// DELETE /api/api-keys/[id] - Delete an API key
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const apiKey = await prisma.apiKey.findUnique({
+      where: {
+        id: params.id,
+      },
+    });
+
+    if (!apiKey) {
+      return new NextResponse("API key not found", { status: 404 });
+    }
+
+    if (apiKey.userId !== session.user.id) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    await prisma.apiKey.delete({
+      where: {
+        id: params.id,
+      },
+    });
+
+    return new NextResponse(null, { status: 204 });
+  } catch (error) {
+    console.error("Error deleting API key:", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+} 

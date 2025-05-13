@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { HiMenu, HiX } from "react-icons/hi";
 import { Button } from "./Button";
+import { useSession, signOut } from "next-auth/react";
 
 const menuItems = [
   { name: "Home", href: "/" },
@@ -17,6 +18,31 @@ const menuItems = [
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const { data: session } = useSession();
+
+  // Simple avatar dropdown
+  const AvatarDropdown = () => (
+    <div className="relative group">
+      <button className="flex items-center space-x-2 focus:outline-none">
+        <img
+          src={session?.user?.image || "/avatar-placeholder.png"}
+          alt={session?.user?.name || "User"}
+          className="w-8 h-8 rounded-full border-2 border-accent"
+        />
+        <span className="text-white font-medium">{session?.user?.name?.split(" ")[0] || "User"}</span>
+      </button>
+      <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-50">
+        <Link href="/dashboard" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Dashboard</Link>
+        <Link href="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</Link>
+        <button
+          onClick={() => signOut()}
+          className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  );
 
   return (
     <nav className="fixed w-full bg-gray-900/95 backdrop-blur-sm z-50 border-b border-white/10">
@@ -51,13 +77,28 @@ export default function Navigation() {
                 <span className="absolute inset-x-0 bottom-0 h-0.5 bg-accent scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </Link>
             ))}
-            <Button
-              variant="secondary"
-              size="sm"
-              className="bg-accent hover:bg-accent/90 text-white px-6"
-            >
-              Login
-            </Button>
+            {session?.user ? (
+              <AvatarDropdown />
+            ) : (
+              <>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="bg-accent hover:bg-accent/90 text-white px-6"
+                  onClick={() => window.location.href = "/auth/signin"}
+                >
+                  Login
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="bg-white text-accent px-6 border border-accent ml-2"
+                  onClick={() => window.location.href = "/auth/register"}
+                >
+                  Signup
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -96,13 +137,28 @@ export default function Navigation() {
               </Link>
             ))}
             <div className="px-3 py-2">
-              <Button
-                variant="secondary"
-                size="sm"
-                className="w-full bg-accent hover:bg-accent/90 text-white"
-              >
-                Login
-              </Button>
+              {session?.user ? (
+                <AvatarDropdown />
+              ) : (
+                <>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    className="w-full bg-accent hover:bg-accent/90 text-white"
+                    onClick={() => window.location.href = "/auth/signin"}
+                  >
+                    Login
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    className="w-full bg-white text-accent border border-accent mt-2"
+                    onClick={() => window.location.href = "/auth/register"}
+                  >
+                    Signup
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </motion.div>

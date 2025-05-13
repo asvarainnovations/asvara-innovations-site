@@ -5,6 +5,7 @@ import { Button } from "./Button";
 import { HiOutlineSearch, HiOutlineDocumentText } from "react-icons/hi";
 import { LinkPreview } from "./ui/link-preview";
 import { SectionDivider } from "./ui/SectionDivider";
+import axiosInstance from '@/lib/axios';
 
 const innovations = [
   {
@@ -26,7 +27,13 @@ const innovations = [
 ];
 
 export default function Innovations() {
-  const handleClick = (url: string) => {
+  const handleClick = async (url: string) => {
+    try {
+      await axiosInstance.post('/api/log-innovation-click', { url });
+    } catch (err) {
+      // Optionally handle/log error, but still open the link
+      console.error('Failed to log click', err);
+    }
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
