@@ -6,7 +6,7 @@ import { HiOutlineMail, HiOutlineOfficeBuilding, HiOutlinePhone, HiOutlineClock 
 import { SectionDivider } from "./ui/SectionDivider";
 import emailjs from '@emailjs/browser';
 import { FormEvent, useState, useEffect } from 'react';
-import { emailConfig } from '../lib/emailjs';
+import { emailConfig } from '@/lib/emailjs';
 import { toast } from 'sonner';
 
 const contactInfo = [

@@ -62,7 +62,7 @@ model SubscriptionPlan {
 
 model Subscription {
   id                String             @id @default(uuid())
-  userId            String
+  userId            String             @unique
   planId            String
   serviceId         String
   status            SubscriptionStatus @default(ACTIVE)

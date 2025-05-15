@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { HiOutlineMail, HiOutlineOfficeBuilding, HiOutlinePhone, HiOutlineClock } from "react-icons/hi";
 import emailjs from '@emailjs/browser';
-import { emailConfig } from '../lib/emailjs';
+import { emailConfig } from '@/lib/emailjs';
 import { toast } from 'sonner';
 
 const contactInfo = [
@@ -112,9 +112,8 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
-      {/* Background dots/grid effect */}
-      <div className="absolute inset-0">
+    <div className="min-h-screen bg-gradient-to-br from-[#0f2027] via-[#2c5364] to-black relative overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[radial-gradient(circle,_#ffffff08_1px,_transparent_1px)] bg-[size:16px_16px]" />
       </div>
 

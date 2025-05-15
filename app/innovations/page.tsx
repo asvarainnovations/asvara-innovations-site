@@ -36,11 +36,10 @@ const articles = [
 
 export default function InnovationsPage() {
   return (
-    <main className="relative min-h-screen bg-gradient-to-br from-[#0A0F1C] via-[#1C3D5A] to-[#0A192F]">
+    <main className="relative min-h-screen bg-gradient-to-br from-[#0f2027] via-[#2c5364] to-black overflow-hidden">
       {/* Background Pattern */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0F1C] via-transparent to-transparent" />
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle,_#ffffff08_1px,_transparent_1px)] bg-[size:16px_16px]" />
       </div>
 
       <div className="relative pt-32 pb-20">
@@ -79,7 +78,7 @@ export default function InnovationsPage() {
         </div>
       </div>
 
-      <SectionDivider from="from-[#0A0F1C]" to="to-gray-900" className="z-20" />
+      {/* <SectionDivider from="from-[#0A0F1C]" to="to-gray-900" className="z-20" /> */}
     </main>
   );
 } 

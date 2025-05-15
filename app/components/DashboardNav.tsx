@@ -4,6 +4,8 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
+import { HiMenu, HiX } from "react-icons/hi";
+import { motion, AnimatePresence } from "framer-motion";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard" },
@@ -16,6 +18,7 @@ export default function DashboardNav() {
   const pathname = usePathname();
   const { data: session } = useSession();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -51,7 +54,7 @@ export default function DashboardNav() {
                   href={item.href}
                   className={`inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium ${
                     pathname === item.href
-                      ? "border-blue-500 text-gray-900"
+                      ? "border-accent text-gray-900"
                       : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
                   }`}
                 >
@@ -60,12 +63,13 @@ export default function DashboardNav() {
               ))}
             </div>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center">
+
+          <div className="flex items-center">
             {session?.user ? (
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setDropdownOpen((open) => !open)}
-                  className="flex items-center rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex items-center rounded-full focus:outline-none focus:ring-2 focus:ring-accent"
                 >
                   <img
                     src={session.user.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(session.user.name || session.user.email || "User")}`}
@@ -89,36 +93,64 @@ export default function DashboardNav() {
                 )}
               </div>
             ) : null}
+
+            {/* Mobile menu button */}
+            <div className="sm:hidden ml-4">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                {isMobileMenuOpen ? (
+                  <HiX className="h-6 w-6" />
+                ) : (
+                  <HiMenu className="h-6 w-6" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Mobile menu */}
-      <div className="sm:hidden">
-        <div className="space-y-1 pb-3 pt-2">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
-                pathname === item.href
-                  ? "border-blue-500 bg-blue-50 text-blue-700"
-                  : "border-transparent text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
-              }`}
-            >
-              {item.name}
-            </Link>
-          ))}
-          {session?.user ? (
-            <button
-              onClick={() => signOut({ callbackUrl: "/" })}
-              className="block w-full border-l-4 border-transparent py-2 pl-3 pr-4 text-left text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
-            >
-              Sign Out
-            </button>
-          ) : null}
-        </div>
-      </div>
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="sm:hidden border-t border-gray-200"
+          >
+            <div className="space-y-1 pb-3 pt-2">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
+                    pathname === item.href
+                      ? "border-accent bg-accent/10 text-accent"
+                      : "border-transparent text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ))}
+              {session?.user ? (
+                <button
+                  onClick={() => {
+                    signOut({ callbackUrl: "/" });
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="block w-full border-l-4 border-transparent py-2 pl-3 pr-4 text-left text-base font-medium text-red-600 hover:border-red-300 hover:bg-red-50"
+                >
+                  Sign Out
+                </button>
+              ) : null}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 } 

@@ -3,7 +3,7 @@
 import { ButtonHTMLAttributes, forwardRef } from "react";
 import Link from "next/link";
 import { VariantProps, cva } from "class-variance-authority";
-import { cn } from "@/app/lib/utils";
+import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
@@ -13,6 +13,7 @@ const buttonVariants = cva(
         primary: "bg-accent text-white hover:bg-accent/90",
         secondary: "bg-white/10 text-white hover:bg-white/20",
         outline: "border-2 border-accent/20 text-white hover:bg-accent/10",
+        ghost: "bg-transparent text-accent hover:bg-accent/10",
       },
       size: {
         sm: "h-9 px-4 text-sm",

@@ -9,20 +9,28 @@ import axiosInstance from '@/lib/axios';
 
 const innovations = [
   {
-    title: "AI-Driven Legal Research & Analytics",
-    description: "Smart search, citation mapping, and trend analysis for legal professionals.",
+    title: "PleadSmart (AI Legal Research)",
+    description: "AI-powered case research, citation mapping, and legal analytics for professionals.",
     icon: HiOutlineSearch,
     color: "text-blue-500",
-    url: "https://casegenius.vercel.app/",
+    url: "https://pleadsmart.vercel.app/",
     previewImage: "/images/legal-research-preview.png"
   },
   {
-    title: "AI-Powered Legal Document Review",
-    description: "Automates contract review, clause comparison, and risk assessment.",
+    title: "DocBare (Document Analysis)",
+    description: "Automated document review, clause comparison, and risk assessment with AI.",
     icon: HiOutlineDocumentText,
     color: "text-green-500",
-    url: "https://legal-analysis-pi.vercel.app/",
+    url: "https://docbare.vercel.app/",
     previewImage: "/images/document-review-preview.jpg"
+  },
+  {
+    title: "AI Court Room (Simulation)",
+    description: "Simulate court arguments and hearings with AI-driven conversation for both parties.",
+    icon: HiOutlineSearch,
+    color: "text-purple-500",
+    url: "https://aicourtroom.vercel.app/",
+    previewImage: "/images/ai-courtroom-preview.png"
   },
 ];
 
@@ -70,7 +78,7 @@ export default function Innovations() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-8 items-stretch">
           {innovations.map((innovation, index) => (
             <motion.div
               key={innovation.title}
@@ -78,30 +86,30 @@ export default function Innovations() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              className="group"
+              className="group h-full"
             >
-              <div className="relative bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/10 hover:border-accent/30 transition-all cursor-pointer"
+              <div className="relative bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/10 hover:border-accent/30 transition-all cursor-pointer h-full flex flex-col"
                 onClick={() => handleClick(innovation.url)}
               >
-                <LinkPreview 
-                  url={innovation.url}
-                  staticPreviewImage={innovation.title === "AI-Driven Legal Research & Analytics" ? innovation.previewImage : undefined}
-                >
-                  <div className="flex flex-col items-start">
-                    <div className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors mb-6">
-                      <innovation.icon className={`h-6 w-6 text-accent`} />
-                    </div>
-                    <h3 className="text-2xl font-poppins font-bold text-white mb-4">
-                      {innovation.title}
-                    </h3>
-                    <p className="text-gray-300 mb-6">
-                      {innovation.description}
-                    </p>
+                <div className="h-48 w-full mb-6 rounded-xl overflow-hidden flex items-center justify-center bg-black/10">
+                  <img src={innovation.previewImage} alt={innovation.title} className="object-cover w-full h-full" />
+                </div>
+                <div className="flex flex-col items-start h-full flex-1">
+                  <div className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors mb-6">
+                    <innovation.icon className={`h-6 w-6 text-accent`} />
+                  </div>
+                  <h3 className="text-2xl font-poppins font-bold text-white mb-4">
+                    {innovation.title}
+                  </h3>
+                  <p className="text-gray-300 mb-6">
+                    {innovation.description}
+                  </p>
+                  <div className="mt-auto">
                     <Button variant="ghost" className="text-accent hover:text-white hover:bg-accent/20">
                       Learn More
                     </Button>
                   </div>
-                </LinkPreview>
+                </div>
               </div>
             </motion.div>
           ))}

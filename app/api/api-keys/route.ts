@@ -1,13 +1,23 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import prisma from '@/lib/prismadb';
 import crypto from "crypto";
+import { Session } from "next-auth";
+
+interface SessionWithUser extends Session {
+  user: {
+    id: string;
+    email?: string | null;
+    name?: string | null;
+    image?: string | null;
+  };
+}
 
 // GET /api/api-keys - Get all API keys for the current user
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions) as SessionWithUser;
 
     if (!session?.user?.id) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -20,9 +30,9 @@ export async function GET() {
       select: {
         id: true,
         name: true,
-        key: true,
+        token: true,
         createdAt: true,
-        lastUsed: true,
+        lastUsedAt: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -39,7 +49,7 @@ export async function GET() {
 // POST /api/api-keys - Create a new API key
 export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions) as SessionWithUser;
 
     if (!session?.user?.id) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -53,20 +63,21 @@ export async function POST(request: Request) {
     }
 
     // Generate a secure random API key
-    const key = `ask_${crypto.randomBytes(32).toString("hex")}`;
+    const token = `ask_${crypto.randomBytes(32).toString("hex")}`;
 
     const apiKey = await prisma.apiKey.create({
       data: {
         name,
-        key,
+        token,
         userId: session.user.id,
+        serviceId: "default", // You might want to make this configurable
       },
       select: {
         id: true,
         name: true,
-        key: true,
+        token: true,
         createdAt: true,
-        lastUsed: true,
+        lastUsedAt: true,
       },
     });
 

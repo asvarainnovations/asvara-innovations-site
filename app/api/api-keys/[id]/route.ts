@@ -1,15 +1,27 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import prisma from '@/lib/prismadb';
+import { Session } from "next-auth";
+import type { NextRequest } from "next/server";
+
+interface SessionWithUser extends Session {
+  user: {
+    id: string;
+    email?: string | null;
+    name?: string | null;
+    image?: string | null;
+  }
+}
 
 // DELETE /api/api-keys/[id] - Delete an API key
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
-) {
+  context: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
   try {
-    const session = await getServerSession(authOptions);
+    const { id } = await context.params;
+    const session = await getServerSession(authOptions) as SessionWithUser;
 
     if (!session?.user?.id) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -17,7 +29,7 @@ export async function DELETE(
 
     const apiKey = await prisma.apiKey.findUnique({
       where: {
-        id: params.id,
+        id,
       },
     });
 
@@ -31,7 +43,7 @@ export async function DELETE(
 
     await prisma.apiKey.delete({
       where: {
-        id: params.id,
+        id,
       },
     });
 
