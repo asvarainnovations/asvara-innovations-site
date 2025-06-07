@@ -198,45 +198,45 @@ export default function ApiKeysPage() {
           <p>No API keys found. Create your first API key to get started.</p>
         </div>
       ) : (
-        <div className="mt-8 flow-root">
-          <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+      <div className="mt-8 flow-root">
+        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
               <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg bg-[#181c24]">
                 <table className="min-w-full divide-y divide-[#222c3c]">
                   <thead className="bg-[#232b3a]">
-                    <tr>
-                      <th
-                        scope="col"
+                  <tr>
+                    <th
+                      scope="col"
                         className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6"
-                      >
-                        Name
-                      </th>
-                      <th
-                        scope="col"
+                    >
+                      Name
+                    </th>
+                    <th
+                      scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-white"
-                      >
-                        API Key
-                      </th>
-                      <th
-                        scope="col"
+                    >
+                      API Key
+                    </th>
+                    <th
+                      scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-white"
-                      >
-                        Created
-                      </th>
-                      <th
-                        scope="col"
+                    >
+                      Created
+                    </th>
+                    <th
+                      scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-white"
-                      >
-                        Last Used
-                      </th>
-                      <th
-                        scope="col"
-                        className="relative py-3.5 pl-3 pr-4 sm:pr-6"
-                      >
-                        <span className="sr-only">Actions</span>
-                      </th>
-                    </tr>
-                  </thead>
+                    >
+                      Last Used
+                    </th>
+                    <th
+                      scope="col"
+                      className="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                    >
+                      <span className="sr-only">Actions</span>
+                    </th>
+                  </tr>
+                </thead>
                   <tbody className="divide-y divide-[#222c3c] bg-[#181c24]">
                     {apiKeys.map((key) => (
                       <tr key={key.id}>
@@ -262,12 +262,12 @@ export default function ApiKeysPage() {
                         </td>
                       </tr>
                     ))}
-                  </tbody>
-                </table>
-              </div>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
+      </div>
       )}
     </div>
   );

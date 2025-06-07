@@ -181,7 +181,7 @@ export default function DashboardPage() {
           </Link>
 
           <Link
-            href="/profile"
+            href="/dashboard/profile"
             className="relative flex items-center space-x-3 rounded-lg border border-[#222c3c] bg-[#181c24] px-6 py-5 shadow-sm hover:border-[#007BFF]"
           >
             <div className="flex-shrink-0">

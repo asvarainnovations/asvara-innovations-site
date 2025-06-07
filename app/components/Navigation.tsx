@@ -33,7 +33,6 @@ export default function Navigation() {
       </button>
       <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-50">
         <Link href="/dashboard" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Dashboard</Link>
-        <Link href="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</Link>
         <button
           onClick={() => signOut()}
           className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
