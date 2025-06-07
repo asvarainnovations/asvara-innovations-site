@@ -94,13 +94,16 @@ export default function Pricing() {
   const businessPlan = plans[6];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0f2027] via-[#2c5364] to-black relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-black via-[#101522] to-black relative overflow-hidden">
       {/* Background dots/grid effect */}
       <div className="absolute inset-0 pointer-events-none">
+        {/* Light beam from top right */}
+        <div className="absolute top-0 right-0 w-[900px] h-[700px] bg-[radial-gradient(ellipse_at_top_right,_rgba(0,123,255,0.25)_0%,_rgba(255,255,255,0.10)_60%,_transparent_100%)] blur-2xl opacity-80 z-0" />
+        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-to-br from-accent/30 via-blue-700/20 to-transparent rounded-full blur-3xl opacity-60 z-0 animate-pulse" />
         <div className="absolute inset-0 bg-[radial-gradient(circle,_#ffffff08_1px,_transparent_1px)] bg-[size:16px_16px]" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 flex flex-col gap-20">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-40 pb-24 flex flex-col gap-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

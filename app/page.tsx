@@ -2,9 +2,13 @@
 
 import Hero from './components/Hero'
 import Navbar from './components/Navbar'
-import Transforming from './components/Transforming'
 import Footer from './components/Footer'
 import { useState } from 'react'
+import ProblemSolutionSection from './components/ProblemSolutionSection';
+import FeaturesGrid from './components/FeaturesGrid';
+import HowItWorksSection from './components/HowItWorksSection';
+import ScreenshotsCarousel from './components/ScreenshotsCarousel';
+import CallToActionBanner from './components/CallToActionBanner';
 
 export default function Home() {
   const [startFade, setStartFade] = useState(false);
@@ -22,12 +26,16 @@ export default function Home() {
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[radial-gradient(circle,_#ffffff08_1px,_transparent_1px)] bg-[size:16px_16px]" />
       </div>
-      <Navbar animateIn={startFade} />
+      {/* <Navbar animateIn={startFade} /> */}
       <Hero 
         onFadeStart={() => setStartFade(true)} 
         onFadeHalf={handleHeroComplete}
       />
-      <Transforming startAnimation={startTransforming} />
+      <ProblemSolutionSection />
+      <FeaturesGrid />
+      <HowItWorksSection />
+      {/* <ScreenshotsCarousel /> */}
+      <CallToActionBanner />
       <Footer />
     </main>
   )

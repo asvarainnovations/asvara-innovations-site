@@ -3,6 +3,7 @@ import { Inter, Poppins, Roboto } from "next/font/google";
 import "./globals.css";
 import { Toaster } from 'sonner';
 import { Providers } from './providers';
+import ClientLayoutWrapper from './components/ClientLayoutWrapper';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -66,7 +67,9 @@ export default function RootLayout({
           expand
         />
         <Providers>
-          {children}
+          <ClientLayoutWrapper>
+            {children}
+          </ClientLayoutWrapper>
         </Providers>
       </body>
     </html>

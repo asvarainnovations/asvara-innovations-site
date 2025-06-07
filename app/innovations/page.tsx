@@ -36,13 +36,16 @@ const articles = [
 
 export default function InnovationsPage() {
   return (
-    <main className="relative min-h-screen bg-gradient-to-br from-[#0f2027] via-[#2c5364] to-black overflow-hidden">
+    <main className="relative min-h-screen bg-gradient-to-br from-black via-[#101522] to-black overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 pointer-events-none">
+        {/* Light beam from top right */}
+        <div className="absolute top-0 right-0 w-[900px] h-[700px] bg-[radial-gradient(ellipse_at_top_right,_rgba(0,123,255,0.25)_0%,_rgba(255,255,255,0.10)_60%,_transparent_100%)] blur-2xl opacity-80 z-0" />
+        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-to-br from-accent/30 via-blue-700/20 to-transparent rounded-full blur-3xl opacity-60 z-0 animate-pulse" />
         <div className="absolute inset-0 bg-[radial-gradient(circle,_#ffffff08_1px,_transparent_1px)] bg-[size:16px_16px]" />
       </div>
 
-      <div className="relative pt-32 pb-20">
+      <div className="relative pt-40 pb-20">
         {/* Header Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <motion.div

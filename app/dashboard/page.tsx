@@ -7,18 +7,18 @@ export default function DashboardPage() {
   const { data: session } = useSession();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 min-h-screen bg-black">
       <div className="sm:flex sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-white">Dashboard</h1>
+          <p className="mt-1 text-sm text-gray-300">
             Welcome back, {session?.user?.name || "User"}!
           </p>
         </div>
         <div className="mt-4 sm:mt-0">
           <Link
             href="/dashboard/api-keys"
-            className="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            className="inline-flex items-center rounded-md bg-[#007BFF] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#339CFF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#007BFF]"
           >
             Generate API Key
           </Link>
@@ -27,12 +27,12 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {/* Usage Stats Card */}
-        <div className="overflow-hidden rounded-lg bg-white shadow">
+        <div className="overflow-hidden rounded-lg bg-[#181c24] shadow border border-[#222c3c]">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <svg
-                  className="h-6 w-6 text-gray-400"
+                  className="h-6 w-6 text-[#007BFF]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -47,10 +47,10 @@ export default function DashboardPage() {
               </div>
               <div className="ml-5 w-0 flex-1">
                 <dl>
-                  <dt className="truncate text-sm font-medium text-gray-500">
+                  <dt className="truncate text-sm font-medium text-gray-300">
                     API Calls (This Month)
                   </dt>
-                  <dd className="text-lg font-medium text-gray-900">0</dd>
+                  <dd className="text-lg font-medium text-white">0</dd>
                 </dl>
               </div>
             </div>
@@ -58,12 +58,12 @@ export default function DashboardPage() {
         </div>
 
         {/* Subscription Status Card */}
-        <div className="overflow-hidden rounded-lg bg-white shadow">
+        <div className="overflow-hidden rounded-lg bg-[#181c24] shadow border border-[#222c3c]">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <svg
-                  className="h-6 w-6 text-gray-400"
+                  className="h-6 w-6 text-[#007BFF]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -78,10 +78,10 @@ export default function DashboardPage() {
               </div>
               <div className="ml-5 w-0 flex-1">
                 <dl>
-                  <dt className="truncate text-sm font-medium text-gray-500">
+                  <dt className="truncate text-sm font-medium text-gray-300">
                     Subscription Plan
                   </dt>
-                  <dd className="text-lg font-medium text-gray-900">Free Trial</dd>
+                  <dd className="text-lg font-medium text-white">Free Trial</dd>
                 </dl>
               </div>
             </div>
@@ -89,12 +89,12 @@ export default function DashboardPage() {
         </div>
 
         {/* API Keys Card */}
-        <div className="overflow-hidden rounded-lg bg-white shadow">
+        <div className="overflow-hidden rounded-lg bg-[#181c24] shadow border border-[#222c3c]">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <svg
-                  className="h-6 w-6 text-gray-400"
+                  className="h-6 w-6 text-[#007BFF]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -109,10 +109,10 @@ export default function DashboardPage() {
               </div>
               <div className="ml-5 w-0 flex-1">
                 <dl>
-                  <dt className="truncate text-sm font-medium text-gray-500">
+                  <dt className="truncate text-sm font-medium text-gray-300">
                     Active API Keys
                   </dt>
-                  <dd className="text-lg font-medium text-gray-900">0</dd>
+                  <dd className="text-lg font-medium text-white">0</dd>
                 </dl>
               </div>
             </div>
@@ -122,15 +122,15 @@ export default function DashboardPage() {
 
       {/* Quick Actions */}
       <div className="mt-8">
-        <h2 className="text-lg font-medium text-gray-900">Quick Actions</h2>
+        <h2 className="text-lg font-medium text-white">Quick Actions</h2>
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Link
             href="/dashboard/api-keys"
-            className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm hover:border-gray-400"
+            className="relative flex items-center space-x-3 rounded-lg border border-[#222c3c] bg-[#181c24] px-6 py-5 shadow-sm hover:border-[#007BFF]"
           >
             <div className="flex-shrink-0">
               <svg
-                className="h-6 w-6 text-gray-400"
+                className="h-6 w-6 text-[#007BFF]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -145,8 +145,8 @@ export default function DashboardPage() {
             </div>
             <div className="min-w-0 flex-1">
               <span className="absolute inset-0" aria-hidden="true" />
-              <p className="text-sm font-medium text-gray-900">Manage API Keys</p>
-              <p className="truncate text-sm text-gray-500">
+              <p className="text-sm font-medium text-white">Manage API Keys</p>
+              <p className="truncate text-sm text-gray-300">
                 Create and manage your API keys
               </p>
             </div>
@@ -154,11 +154,11 @@ export default function DashboardPage() {
 
           <Link
             href="/dashboard/subscription"
-            className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm hover:border-gray-400"
+            className="relative flex items-center space-x-3 rounded-lg border border-[#222c3c] bg-[#181c24] px-6 py-5 shadow-sm hover:border-[#007BFF]"
           >
             <div className="flex-shrink-0">
               <svg
-                className="h-6 w-6 text-gray-400"
+                className="h-6 w-6 text-[#007BFF]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -173,8 +173,8 @@ export default function DashboardPage() {
             </div>
             <div className="min-w-0 flex-1">
               <span className="absolute inset-0" aria-hidden="true" />
-              <p className="text-sm font-medium text-gray-900">Subscription</p>
-              <p className="truncate text-sm text-gray-500">
+              <p className="text-sm font-medium text-white">Subscription</p>
+              <p className="truncate text-sm text-gray-300">
                 View and manage your subscription
               </p>
             </div>
@@ -182,11 +182,11 @@ export default function DashboardPage() {
 
           <Link
             href="/profile"
-            className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm hover:border-gray-400"
+            className="relative flex items-center space-x-3 rounded-lg border border-[#222c3c] bg-[#181c24] px-6 py-5 shadow-sm hover:border-[#007BFF]"
           >
             <div className="flex-shrink-0">
               <svg
-                className="h-6 w-6 text-gray-400"
+                className="h-6 w-6 text-[#007BFF]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -201,8 +201,8 @@ export default function DashboardPage() {
             </div>
             <div className="min-w-0 flex-1">
               <span className="absolute inset-0" aria-hidden="true" />
-              <p className="text-sm font-medium text-gray-900">Profile Settings</p>
-              <p className="truncate text-sm text-gray-500">
+              <p className="text-sm font-medium text-white">Profile Settings</p>
+              <p className="truncate text-sm text-gray-300">
                 Update your account information
               </p>
             </div>

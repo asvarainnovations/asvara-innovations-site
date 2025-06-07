@@ -5,12 +5,24 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSession, signOut } from "next-auth/react";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { HiMenu, HiX } from 'react-icons/hi';
+import { IoSettingsOutline } from "react-icons/io5";
+import { FiLogOut } from "react-icons/fi";
 
-const Navbar = ({ animateIn = false }) => {
+const Navbar = () => {
   const { data: session } = useSession();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Simple avatar dropdown
   const AvatarDropdown = () => (
@@ -23,13 +35,16 @@ const Navbar = ({ animateIn = false }) => {
         />
         <span className="text-white font-medium hidden md:inline">{session?.user?.name?.split(" ")[0] || "User"}</span>
       </button>
-      <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-50">
-        <Link href="/dashboard" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Dashboard</Link>
-        <Link href="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</Link>
+      <div className="absolute right-0 mt-2 w-max bg-gray-800 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 border border-gray-700">
+        <Link href="/dashboard" className="flex items-center gap-2 px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-t-md">
+          <IoSettingsOutline className="w-5 h-5" />
+          Account Settings
+        </Link>
         <button
           onClick={() => signOut()}
-          className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+          className="w-full flex items-center gap-2 text-left px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-b-md"
         >
+          <FiLogOut className="w-5 h-5" />
           Logout
         </button>
       </div>
@@ -39,9 +54,9 @@ const Navbar = ({ animateIn = false }) => {
   return (
     <motion.nav
       initial={{ y: -60, opacity: 0 }}
-      animate={animateIn ? { y: 0, opacity: 1 } : { y: -60, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: 'easeOut' }}
-      className="fixed w-full z-50 bg-gray-900/95 backdrop-blur-sm border-b border-white/10"
+      className="fixed w-full z-50 transition-colors duration-300 bg-transparent backdrop-blur-md"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
@@ -50,9 +65,9 @@ const Navbar = ({ animateIn = false }) => {
             <Image
               src="/logo.png"
               alt="asvara"
-              width={40}
-              height={40}
-              className="w-8 h-8 sm:w-10 sm:h-10"
+              width={52}
+              height={52}
+              className="object-contain"
               priority
             />
             <span className="text-white text-lg sm:text-xl font-medium whitespace-nowrap">Asvara Innovation</span>

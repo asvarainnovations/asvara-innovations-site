@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import axiosInstance from '@/lib/axios';
+import Link from "next/link";
 
 interface Plan {
   id: string;
@@ -57,12 +58,14 @@ export default function SubscriptionPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Subscription</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Choose the plan that best fits your needs
-        </p>
+    <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 min-h-screen bg-black">
+      <div className="sm:flex sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Subscription</h1>
+          <p className="mt-1 text-sm text-gray-300">
+            Choose the plan that best fits your needs.
+          </p>
+        </div>
       </div>
 
       {error && (
@@ -94,24 +97,24 @@ export default function SubscriptionPage() {
             key={plan.id}
             className={`rounded-lg border ${
               current?.planId === plan.id
-                ? "border-blue-500 bg-blue-50"
-                : "border-gray-200 bg-white"
+                ? "bg-[#101522]"
+                : "border-[#222c3c] bg-[#181c24]"
             } p-6 shadow-sm`}
           >
-            <h2 className="text-lg font-medium text-gray-900">{plan.name}</h2>
+            <h2 className="text-lg font-medium text-white">{plan.name}</h2>
             <p className="mt-4">
-              <span className="text-4xl font-bold tracking-tight text-gray-900">
+              <span className="text-4xl font-bold tracking-tight text-white">
                 ${plan.priceCents / 100}
               </span>
-              <span className="text-base font-medium text-gray-500">/month</span>
+              <span className="text-base font-medium text-gray-300">/month</span>
             </p>
-            <p className="mt-1 text-sm text-gray-500">{plan.description}</p>
+            <p className="mt-1 text-sm text-gray-300">{plan.description}</p>
             <ul className="mt-6 space-y-4">
               {plan.features?.map((feature) => (
                 <li key={feature} className="flex items-start">
                   <div className="flex-shrink-0">
                     <svg
-                      className="h-5 w-5 text-green-500"
+                      className="h-5 w-5 text-accent"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
@@ -122,7 +125,7 @@ export default function SubscriptionPage() {
                       />
                     </svg>
                   </div>
-                  <p className="ml-3 text-sm text-gray-700">{feature}</p>
+                  <p className="ml-3 text-sm text-gray-300">{feature}</p>
                 </li>
               ))}
             </ul>
@@ -130,7 +133,7 @@ export default function SubscriptionPage() {
               {current?.planId === plan.id ? (
                 <button
                   disabled
-                  className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="w-full rounded-md border border-[#222c3c] bg-[#232b3a] px-4 py-2 text-sm font-medium text-gray-200 shadow-sm hover:bg-[#222c3c] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
                   Current Plan
                 </button>
@@ -150,20 +153,22 @@ export default function SubscriptionPage() {
         ))}
       </div>
 
-      <div className="mt-8 rounded-lg bg-gray-50 p-6">
-        <h2 className="text-lg font-medium text-gray-900">Need a custom plan?</h2>
-        <p className="mt-1 text-sm text-gray-500">
-          Contact our sales team for a custom solution tailored to your needs.
-        </p>
-        <div className="mt-4">
-          <a
-            href="mailto:sales@example.com"
-            className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
-            Contact Sales
-          </a>
+      {!current?.planId && (
+        <div className="mt-8 rounded-lg bg-[#181c24] p-6 shadow text-center">
+          <h2 className="text-lg font-medium text-white">You are currently on the Free Plan.</h2>
+          <p className="mt-2 text-sm text-gray-300">
+            Upgrade to a premium plan to unlock more features and benefits.
+          </p>
+          <div className="mt-4">
+            <Link
+              href="/pricing"
+              className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              View Pricing Plans
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 } 

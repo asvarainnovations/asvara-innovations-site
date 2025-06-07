@@ -49,7 +49,7 @@ export default function SignIn() {
         <div className="flex h-full flex-col items-center justify-center p-12 text-white">
           <div className="mb-8">
             <Image
-              src="/images/logo.png"
+              src="/logo-white.png"
               alt="Asvara Innovations"
               width={200}
               height={60}
