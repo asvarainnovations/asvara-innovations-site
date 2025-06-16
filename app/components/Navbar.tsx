@@ -9,6 +9,8 @@ import { useState, useEffect } from 'react';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { IoSettingsOutline } from "react-icons/io5";
 import { FiLogOut } from "react-icons/fi";
+import DesktopNavbar from "./DesktopNavbar";
+import MobileNavbar from "./MobileNavbar";
 
 const Navbar = () => {
   const { data: session } = useSession();
@@ -59,136 +61,9 @@ const Navbar = () => {
       className="fixed w-full z-50 transition-colors duration-300 bg-transparent backdrop-blur-md"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo and Brand */}
-          <Link href="/" className="flex items-center gap-2 sm:gap-3">
-            <Image
-              src="/logo.png"
-              alt="asvara"
-              width={52}
-              height={52}
-              className="object-contain"
-              priority
-            />
-            <span className="text-white text-lg sm:text-xl font-medium whitespace-nowrap">Asvara Innovation</span>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-white hover:text-accent transition-colors">
-              Home
-            </Link>
-            <Link href="/innovations" className="text-white hover:text-accent transition-colors">
-              Innovations
-            </Link>
-            <Link href="/pricing" className="text-white hover:text-accent transition-colors">
-              Pricing
-            </Link>
-            <Link href="/contact" className="text-white hover:text-accent transition-colors">
-              Contact Us
-            </Link>
-            {session?.user ? (
-              <AvatarDropdown />
-            ) : (
-              <div className="flex items-center space-x-4">
-                <Link
-                  href="/auth/signin"
-                  className="bg-accent text-white px-4 py-2 rounded-lg hover:bg-accent/90 transition-colors"
-                >
-                  Login
-                </Link>
-                <Link
-                  href="/auth/register"
-                  className="bg-white text-accent px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
-                >
-                  Signup
-                </Link>
-              </div>
-            )}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-white hover:text-accent transition-colors focus:outline-none"
-              aria-label="Open main menu"
-            >
-              {isMobileMenuOpen ? (
-                <HiX className="h-7 w-7" />
-              ) : (
-                <HiMenu className="h-7 w-7" />
-              )}
-            </button>
-          </div>
-        </div>
+        <DesktopNavbar />
+        <MobileNavbar isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
       </div>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden bg-gray-900/95 backdrop-blur-sm border-t border-white/10 shadow-lg"
-          >
-            <div className="px-4 py-4 space-y-2 flex flex-col">
-              <Link
-                href="/"
-                className="block text-white hover:text-accent transition-colors py-2 rounded"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Home
-              </Link>
-              <Link
-                href="/innovations"
-                className="block text-white hover:text-accent transition-colors py-2 rounded"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Innovations
-              </Link>
-              <Link
-                href="/pricing"
-                className="block text-white hover:text-accent transition-colors py-2 rounded"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Pricing
-              </Link>
-              <Link
-                href="/contact"
-                className="block text-white hover:text-accent transition-colors py-2 rounded"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Contact Us
-              </Link>
-              {session?.user ? (
-                <div className="pt-2">
-                  <AvatarDropdown />
-                </div>
-              ) : (
-                <div className="flex flex-col space-y-2 pt-2">
-                  <Link
-                    href="/auth/signin"
-                    className="bg-accent text-white px-4 py-2 rounded-lg hover:bg-accent/90 transition-colors text-center"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    href="/auth/register"
-                    className="bg-white text-accent px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors text-center"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Signup
-                  </Link>
-                </div>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </motion.nav>
   );
 };

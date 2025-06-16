@@ -6,6 +6,8 @@ import { HiOutlineMail, HiOutlineOfficeBuilding, HiOutlinePhone, HiOutlineClock 
 import emailjs from '@emailjs/browser';
 import { emailConfig } from '@/lib/emailjs';
 import { toast } from 'sonner';
+import ContactForm from "./components/ContactForm";
+import ContactInfoGrid from "./components/ContactInfoGrid";
 
 const contactInfo = [
   {
@@ -142,95 +144,13 @@ export default function Contact() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label
-                      htmlFor="name"
-                      className="block text-sm font-medium text-gray-300 mb-2"
-                    >
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium text-gray-300 mb-2"
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="subject"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
-                    Subject
-                  </label>
-                  <select
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
-                    required
-                  >
-                    {subjects.map((subject) => (
-                      <option key={subject} value={subject}>
-                        {subject}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows={6}
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
-                    required
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-accent text-white py-3 rounded-xl font-semibold hover:bg-accent/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? "Sending..." : "Send Message"}
-                </button>
-              </form>
-            </div>
+            <ContactForm
+              isSubmitting={isSubmitting}
+              formData={formData}
+              handleChange={handleChange}
+              handleSubmit={handleSubmit}
+              subjects={subjects}
+            />
           </motion.div>
 
           {/* Contact Information */}
@@ -239,37 +159,7 @@ export default function Contact() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {contactInfo.map((info, index) => (
-                <motion.div
-                  key={info.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.1 * index }}
-                  className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 p-6"
-                >
-                  <div className="flex items-start">
-                    <div className="bg-accent/10 p-3 rounded-lg">
-                      <info.icon className="h-6 w-6 text-accent" />
-                    </div>
-                    <div className="ml-4">
-                      <h3 className="text-lg font-semibold text-white mb-1">
-                        {info.title}
-                      </h3>
-                      <p className="text-gray-400 text-sm mb-2">
-                        {info.description}
-                      </p>
-                      <a
-                        href={info.link}
-                        className="text-accent hover:text-accent/80 text-sm"
-                      >
-                        {info.detail}
-                      </a>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+            <ContactInfoGrid contactInfo={contactInfo} />
           </motion.div>
         </div>
       </div>

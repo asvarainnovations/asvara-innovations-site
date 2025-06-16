@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Poppins, Roboto } from "next/font/google";
 import "./globals.css";
-import { Toaster } from 'sonner';
-import { Providers } from './providers';
-import ClientLayoutWrapper from './components/ClientLayoutWrapper';
+import { Toaster } from "sonner";
+import { Providers } from "./providers";
+import ClientLayoutWrapper from "./components/ClientLayoutWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,22 +30,33 @@ export const metadata: Metadata = {
   description: "Revolutionizing Legal Work with AI Innovation",
   icons: {
     icon: [
-      { url: '/logo.png', sizes: 'any' },
-      { url: '/logo.png', sizes: '16x16', type: 'image/png' },
-      { url: '/logo.png', sizes: '32x32', type: 'image/png' }
+      {
+        url: "/android-chrome-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        url: "/android-chrome-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
     ],
     apple: [
-      { url: '/logo.png', sizes: '180x180', type: 'image/png' }
+      {
+        url: "/android-chrome-192x192.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
     ],
     other: [
       {
-        rel: 'mask-icon',
-        url: '/logo.png',
-        color: '#00A6FB'
-      }
-    ]
+        rel: "mask-icon",
+        url: "/android-chrome-192x192.png",
+        color: "#00A6FB",
+      },
+    ],
   },
-  manifest: '/site.webmanifest'
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({
@@ -54,22 +65,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${poppins.variable} ${roboto.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${poppins.variable} ${roboto.variable}`}
+    >
       <head>
-        <link rel="icon" href="/logo.png" type="image/png" />
+        <link rel="icon" href="/android-chrome-192x192.png" type="image/png" />
       </head>
       <body className="font-inter bg-white">
-        <Toaster 
-          theme="dark" 
-          position="top-right"
-          closeButton
-          richColors
-          expand
-        />
         <Providers>
-          <ClientLayoutWrapper>
-            {children}
-          </ClientLayoutWrapper>
+          <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
+          <Toaster />
         </Providers>
       </body>
     </html>

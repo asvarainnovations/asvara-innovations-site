@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { SectionDivider } from "../components/ui/SectionDivider";
-import { ArticleCard } from "../components/ArticleCard";
+import ArticleCard from "./components/ArticleCard";
 
 const articles = [
   {

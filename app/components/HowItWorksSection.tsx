@@ -10,7 +10,7 @@ const steps = [
   },
   {
     icon: Search,
-    title: "Intelligent Retrieval (RAG)",
+    title: "Intelligent Retrieval",
     text: "Ask any legal question and instantly find the most relevant laws or cases."
   },
   {

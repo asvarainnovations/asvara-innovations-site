@@ -21,10 +21,10 @@ const features = [
   },
   {
     icon: Bell,
-    title: "Real-Time Alerts & Updates",
+    title: "AI Court Simulation",
     bullets: [
-      "Get notified on statute amendments and new judgments",
-      "Tailor alerts by practice area."
+      "Simulate court arguments and hearings with AI-driven conversation.",
+      "Practice and prepare for real-world legal proceedings."
     ]
   }
 ];

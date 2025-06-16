@@ -94,6 +94,39 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
    npm run dev
    ```
 
+## Progress
+
+### ✅ Completed
+- Google OAuth authentication (NextAuth.js)
+- Credentials-based registration and login
+- User profile management (update full name)
+- Subscription management (create, list, auto-create on Google signup)
+- API key management (create, list, delete)
+- Plans listing (for default service)
+- Database integration with Prisma ORM and Supabase
+- Database seeding and migrations
+- All core API endpoints for MVP
+
+### 🚧 TODO / In Progress
+- **/api/auth/login**: Issue JWT or session token after successful login (currently only returns user info)
+- **/api/subscribe**: Integrate with payment/subscription backend (currently just logs request)
+- **/api/log-innovation-click**: Save click events to database or analytics service (currently just logs to console)
+- **/api/upload**: Implement file parsing and storage (currently just logs upload request)
+- **API Key Management**: Make `serviceId` dynamic (currently hardcoded to 'default')
+- Add input validation and improved error handling for all endpoints
+- Add rate limiting and security hardening (helmet, CORS, etc.)
+- Add logging and monitoring for production
+- Add unit/integration tests for all APIs
+- Improve user feedback on frontend for all actions
+- Add UI for managing API keys, subscriptions, and uploaded files (if not already present)
+- Document all API endpoints and request/response formats
+- Add setup and deployment instructions for contributors
+- **Implement authentication/authorization checks for admin/editor endpoints (blogs/admin)**
+- **Integrate file/image upload with Supabase Storage**
+- **Add input validation and error handling to all blog APIs**
+- **Connect frontend blog pages to APIs for dynamic data**
+- **Polish UI/UX, add real WYSIWYG, markdown rendering, and all advanced features**
+
 ## API Endpoints
 - `POST /api/auth/register` — Register a new user
 - `POST /api/auth/login` — Login with email/password

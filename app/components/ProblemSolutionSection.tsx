@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 export default function ProblemSolutionSection() {
   return (
     <section className="relative w-full pt-0 pb-20 px-4 bg-black/90">
-      <div className="max-w-5xl mx-auto rounded-3xl border border-[#222c3c] bg-[#181c24]/80 backdrop-blur-xl shadow-xl px-6 py-12 md:py-16 flex flex-col md:flex-row gap-12 items-stretch">
+      <div className="max-w-5xl mx-auto rounded-3xl border border-[#222c3c] bg-[#181c24]/80 backdrop-blur-xl shadow-xl px-16 py-12 md:py-16 flex flex-col md:flex-row gap-3 items-stretch">
         {/* Problem Column */}
         <motion.div initial={{opacity:0, x:-30}} whileInView={{opacity:1, x:0}} transition={{duration:0.7}} viewport={{once:true}} className="flex-1 flex flex-col items-start gap-4 z-20 pr-0 md:pr-10 justify-center">
           <div className="flex items-center gap-4 mb-4">

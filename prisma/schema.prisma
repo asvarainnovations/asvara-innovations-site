@@ -153,3 +153,94 @@ enum SubscriptionStatus {
   CANCELED
   EXPIRED
 }
+
+enum BlogStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  SCHEDULED
+  PUBLISHED
+}
+
+model BlogPost {
+  id            String      @id @default(uuid())
+  title         String
+  excerpt       String?
+  content       String
+  status        BlogStatus  @default(PENDING)
+  tags          BlogTag[]   @relation("PostTags")
+  coverImage    String?
+  attachments   BlogAttachment[]
+  author        BlogAuthor? @relation(fields: [authorId], references: [id])
+  authorId      String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  publishedAt   DateTime?
+  editorId      String?
+  versions      BlogVersion[]
+  comments      BlogComment[]
+  submission    BlogSubmission? @relation("PostSubmission", fields: [submissionId], references: [id])
+  submissionId  String? @unique
+}
+
+model BlogSubmission {
+  id            String      @id @default(uuid())
+  post          BlogPost?   @relation("PostSubmission")
+  authorName    String
+  authorEmail   String
+  socialProfile String?
+  title         String
+  excerpt       String?
+  content       String
+  tags          String[]
+  coverImage    String?
+  attachments   BlogAttachment[]
+  consent       Boolean
+  status        BlogStatus  @default(PENDING)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model BlogTag {
+  id      String      @id @default(uuid())
+  name    String      @unique
+  posts   BlogPost[]  @relation("PostTags")
+}
+
+model BlogAttachment {
+  id           String   @id @default(uuid())
+  url          String
+  type         String
+  post         BlogPost? @relation(fields: [postId], references: [id])
+  postId       String?
+  submission   BlogSubmission? @relation(fields: [submissionId], references: [id])
+  submissionId String?
+}
+
+model BlogAuthor {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  avatar    String?
+  bio       String?
+  social    String?
+  posts     BlogPost[]
+}
+
+model BlogVersion {
+  id        String   @id @default(uuid())
+  post      BlogPost @relation(fields: [postId], references: [id])
+  postId    String
+  content   String
+  createdAt DateTime @default(now())
+  editorId  String?
+}
+
+model BlogComment {
+  id        String   @id @default(uuid())
+  post      BlogPost @relation(fields: [postId], references: [id])
+  postId    String
+  author    String
+  content   String
+  createdAt DateTime @default(now())
+}

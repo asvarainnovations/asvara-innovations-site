@@ -47,7 +47,7 @@ export default function Footer() {
                 alt="Asvara Innovations Logo"
                 width={40}
                 height={40}
-                className="w-10 h-10"
+                className="h-10 object-contain"
               />
               <span className="text-2xl font-poppins font-bold text-white">
                 Asvara

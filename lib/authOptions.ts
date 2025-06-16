@@ -15,6 +15,13 @@ export const authOptions: AuthOptions = {
         }
       },
       profile(profile: any) {
+        console.log('Google profile data:', { 
+          sub: profile.sub,
+          email: profile.email,
+          name: profile.name,
+          picture: profile.picture 
+        });
+        
         return {
           id: profile.sub,
           email: profile.email,
@@ -57,37 +64,158 @@ export const authOptions: AuthOptions = {
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   callbacks: {
-    async signIn({ user, account }: any) {
-      if (account?.provider === "google") {
-        const existingUser = await prismadb.user.findUnique({
-          where: { email: user.email! }
-        });
-        if (!existingUser) {
-          await prismadb.user.create({
-            data: {
-              email: user.email!,
-              fullName: user.name || "",
-              passwordHash: "",
-              role: "USER",
-              isActive: true
-            }
+    async signIn({ user, account, profile }: any) {
+      try {
+        console.log('=== Start SignIn Callback ===');
+        console.log('SignIn user data:', JSON.stringify(user, null, 2));
+        console.log('SignIn account data:', JSON.stringify(account, null, 2));
+        console.log('SignIn profile data:', JSON.stringify(profile, null, 2));
+        
+        if (account?.provider === "google") {
+          console.log('Provider is Google, checking for existing user...');
+          const existingUser = await prismadb.user.findUnique({
+            where: { email: user.email! }
           });
+          
+          console.log('Existing user found:', existingUser ? 'Yes' : 'No');
+
+          if (!existingUser) {
+            console.log('Creating new user with data:', {
+              email: user.email,
+              name: user.name,
+              image: user.image
+            });
+
+            try {
+              const newUser = await prismadb.user.create({
+                data: {
+                  email: user.email!,
+                  fullName: user.name || "",
+                  name: user.name || "",
+                  image: user.image || "",
+                  passwordHash: "",
+                  role: "USER",
+                  isActive: true,
+                  emailVerified: new Date(),
+                }
+              });
+              
+              console.log('Successfully created new user:', {
+                id: newUser.id,
+                email: newUser.email,
+                role: newUser.role
+              });
+
+              // Get the default service and basic plan
+              const service = await prismadb.service.findFirst({
+                where: { key: 'default' },
+                include: {
+                  plans: {
+                    where: { name: 'Basic' }
+                  }
+                }
+              });
+
+              if (service && service.plans.length > 0) {
+                // Create a default subscription for the new user
+                const subscription = await prismadb.subscription.create({
+                  data: {
+                    userId: newUser.id,
+                    serviceId: service.id,
+                    planId: service.plans[0].id,
+                    status: 'ACTIVE',
+                    startDate: new Date(),
+                    renewalDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+                  }
+                });
+                
+                console.log('Created default subscription:', {
+                  id: subscription.id,
+                  userId: subscription.userId,
+                  planId: subscription.planId
+                });
+              }
+
+              user.id = newUser.id;
+              user.role = newUser.role;
+            } catch (createError) {
+              console.error('Error creating new user:', createError);
+              throw createError;
+            }
+          } else {
+            console.log('Using existing user:', {
+              id: existingUser.id,
+              email: existingUser.email,
+              role: existingUser.role
+            });
+
+            user.id = existingUser.id;
+            user.role = existingUser.role;
+            
+            // Update user's info if needed
+            if (user.name !== existingUser.name || user.image !== existingUser.image) {
+              console.log('Updating user profile info...');
+              await prismadb.user.update({
+                where: { id: existingUser.id },
+                data: {
+                  name: user.name || existingUser.name,
+                  image: user.image || existingUser.image,
+                }
+              });
+              console.log('Profile info updated successfully');
+            }
+          }
         }
+        
+        console.log('=== End SignIn Callback ===');
+        return true;
+      } catch (error) {
+        console.error('Error in signIn callback:', error);
+        // Log the full error details
+        if (error instanceof Error) {
+          console.error('Error name:', error.name);
+          console.error('Error message:', error.message);
+          console.error('Error stack:', error.stack);
+        }
+        return false;
       }
-      return true;
     },
     async jwt({ token, user, account }: any) {
+      console.log('JWT Callback - Input:', {
+        tokenId: token?.id,
+        userId: user?.id,
+        accountType: account?.provider
+      });
+      
       if (user) {
-        token.id = (user as any).id;
-        token.role = (user as any).role;
+        token.id = user.id;
+        token.role = user.role;
       }
+      
+      console.log('JWT Callback - Output token:', {
+        id: token.id,
+        role: token.role,
+        email: token.email
+      });
+      
       return token;
     },
     async session({ session, token }: any) {
+      console.log('Session Callback - Input:', {
+        sessionUserId: session?.user?.id,
+        tokenId: token?.id
+      });
+      
       if (token && session.user) {
-        (session.user as any).id = token.id;
-        (session.user as any).role = token.role;
+        session.user.id = token.id;
+        session.user.role = token.role;
       }
+      
+      console.log('Session Callback - Output:', {
+        userId: session?.user?.id,
+        userRole: session?.user?.role
+      });
+      
       return session;
     }
   },
@@ -96,4 +224,5 @@ export const authOptions: AuthOptions = {
     error: "/auth/error",
   },
   secret: process.env.NEXTAUTH_SECRET,
+  debug: true, // Enable debug mode to see all NextAuth.js logs
 };
