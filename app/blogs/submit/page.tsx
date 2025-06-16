@@ -113,7 +113,18 @@ export default function BlogSubmitPage() {
     setErrorSummary([]);
 
     try {
-      // Upload cover image if present
+      // 1. Validate form data FIRST (before uploading files)
+      const tags = tagsInput.split(",").map((t: string) => t.trim()).filter(Boolean);
+      const validationResult = BlogSchema.safeParse({ ...draft, tags });
+      if (!validationResult.success) {
+        validationResult.error.errors.forEach((error) => {
+          toast.error(error.message);
+        });
+        setSubmitting(false);
+        return;
+      }
+
+      // 2. Upload cover image if present
       let coverImageUrl = "";
       if (draft.coverImage) {
         const { url, error } = await uploadFile(
@@ -125,7 +136,7 @@ export default function BlogSubmitPage() {
         coverImageUrl = url;
       }
 
-      // Upload attachments
+      // 3. Upload attachments
       const attachmentUrls = [];
       for (const file of draft.attachments) {
         const { url, error } = await uploadFile(
@@ -137,17 +148,16 @@ export default function BlogSubmitPage() {
         attachmentUrls.push(url);
       }
 
-      // Validate form data
-      const validatedData = BlogSchema.parse({
-        ...draft,
-        coverImageUrl,
-        attachmentUrls,
-      });
-
+      // 4. Submit to API
       const response = await fetch("/api/blogs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(validatedData),
+        body: JSON.stringify({
+          ...draft,
+          tags,
+          coverImageUrl,
+          attachmentUrls,
+        }),
       });
 
       if (!response.ok) {
@@ -155,7 +165,8 @@ export default function BlogSubmitPage() {
         throw new Error(error.message || "Failed to submit blog post");
       }
 
-      toast.success("Blog post submitted successfully!");
+      localStorage.removeItem("blogDraft");
+      toast.success("Blog post submitted successfully! It will be reviewed by our team.");
       router.push("/blogs");
     } catch (err) {
       console.error("Error submitting blog post:", err);

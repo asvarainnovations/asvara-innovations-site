@@ -11,8 +11,11 @@ export const uploadFile = async (
   path: string
 ): Promise<{ url: string; error: Error | null }> => {
   try {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+    if (!file || !file.name) {
+      throw new Error('No file or file name provided for upload.');
+    }
+    const fileExt = file.name.includes('.') ? file.name.split('.').pop() : '';
+    const fileName = `${Math.random().toString(36).substring(2)}${fileExt ? '.' + fileExt : ''}`;
     const filePath = `${path}/${fileName}`;
 
     const { data, error } = await supabase.storage
@@ -24,9 +27,10 @@ export const uploadFile = async (
 
     if (error) throw error;
 
-    const { data: { publicUrl } } = supabase.storage
+    const { data: publicData } = supabase.storage
       .from(bucket)
       .getPublicUrl(filePath);
+    const publicUrl = publicData?.publicUrl || '';
 
     return { url: publicUrl, error: null };
   } catch (error) {

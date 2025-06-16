@@ -75,7 +75,7 @@ export default function RootLayout({
       <body className="font-inter bg-white">
         <Providers>
           <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
-          <Toaster />
+          <Toaster richColors position="top-center" />
         </Providers>
       </body>
     </html>
