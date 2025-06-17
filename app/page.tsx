@@ -36,7 +36,6 @@ export default function Home() {
       <HowItWorksSection />
       {/* <ScreenshotsCarousel /> */}
       <CallToActionBanner />
-      <a href="/blogs" className="block mt-8 text-lg font-bold text-blue-600 underline hover:text-blue-800">Visit our Blog</a>
       <Footer />
     </main>
   )

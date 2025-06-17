@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prismadb from '@/lib/prismadb';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = params;
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
+  const supabaseBlogImageBase = "https://hufynfvixoauwggufgol.supabase.co/storage/v1/object/public/blog-images/";
+  const supabaseAttachmentBase = "https://hufynfvixoauwggufgol.supabase.co/storage/v1/object/public/blog-attachments/";
   try {
     // Try to find an approved blog post first
     const blog = await prismadb.blogPost.findUnique({
@@ -13,10 +15,20 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       },
     });
     if (blog) {
+      const coverImage = blog.coverImage
+        ? (blog.coverImage.startsWith("http")
+            ? blog.coverImage
+            : supabaseBlogImageBase + blog.coverImage)
+        : null;
+      const attachments = (blog.attachments || []).map(a => ({
+        ...a,
+        url: a.url.startsWith("http") ? a.url : supabaseAttachmentBase + a.url,
+      }));
       return NextResponse.json({
         blog: {
           ...blog,
-          attachments: blog.attachments?.map(a => ({ url: a.url, type: a.type })) || [],
+          coverImage,
+          attachments,
         },
       });
     }
@@ -28,10 +40,20 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       },
     });
     if (submission) {
+      const coverImage = submission.coverImage
+        ? (submission.coverImage.startsWith("http")
+            ? submission.coverImage
+            : supabaseBlogImageBase + submission.coverImage)
+        : null;
+      const attachments = (submission.attachments || []).map(a => ({
+        ...a,
+        url: a.url.startsWith("http") ? a.url : supabaseAttachmentBase + a.url,
+      }));
       return NextResponse.json({
         blog: {
           ...submission,
-          attachments: submission.attachments?.map(a => ({ url: a.url, type: a.type })) || [],
+          coverImage,
+          attachments,
         },
       });
     }

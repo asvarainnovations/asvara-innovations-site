@@ -72,7 +72,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/android-chrome-192x192.png" type="image/png" />
       </head>
-      <body className="font-inter bg-white">
+      <body className="font-inter bg-black">
         <Providers>
           <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
           <Toaster richColors position="top-center" />

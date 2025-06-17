@@ -18,45 +18,46 @@ interface HeroProps {
 
 function LoggedInHero({ logoRef, startFade }: { logoRef: React.RefObject<HTMLDivElement>, startFade: boolean }) {
   return (
-    <div className="w-full flex flex-col md:flex-row items-center justify-center gap-8 bg-gradient-to-b from-[#111] to-transparent rounded-3xl p-8 shadow-2xl">
+    <div className="w-full flex flex-col md:flex-row items-center justify-center bg-gradient-to-b from-[#111] to-transparent rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl gap-4 md:gap-8">
       {/* Left: Logo, name, tagline */}
-      <div className="w-full md:w-[40%] flex flex-col items-center justify-center mb-8 md:mb-0 h-full">
+      <div className="w-full md:w-[50%] flex flex-col items-center justify-center mb-4 md:mb-0 h-full">
         <div className="relative flex flex-col items-center">
-          <div className="absolute -inset-6 rounded-full bg-gradient-to-br from-accent/40 via-blue-700/30 to-transparent blur-2xl animate-pulse z-0" />
+          <div className="absolute -inset-4 sm:-inset-6 rounded-full bg-gradient-to-br from-accent/40 via-blue-700/30 to-transparent blur-2xl animate-pulse z-0" />
           <div ref={logoRef} className="relative z-10 flex flex-col items-center text-center">
             <Image
               src="/logo-white.png"
               alt="asvara"
-              width={140}
-              height={140}
-              className="mb-4 drop-shadow-xl"
+              width={300}
+              height={300}
+              className="mb-2 sm:mb-4 drop-shadow-xl"
               priority
+              sizes="(max-width: 640px) 140px, (max-width: 1024px) 220px, 300px"
             />
-            <h2 className="text-white text-2xl font-medium font-roboto mb-1">asvara</h2>
-            <p className="text-gray-400 text-base">Legal Eagle On Board</p>
+            <h2 className="text-white text-4xl sm:text-3xl md:text-4xl font-medium font-roboto mb-1">asvara</h2>
+            <p className="text-gray-400 text-xl sm:text-lg md:text-xl">Legal Eagle On Board</p>
           </div>
         </div>
       </div>
       {/* Right: Main content */}
       <motion.div 
-        className="space-y-6 w-full items-center"
+        className="space-y-4 sm:space-y-6 w-full flex flex-col items-center justify-center text-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: startFade ? 1 : 0, y: startFade ? 0 : 20 }}
         transition={{ duration: 1, delay: 0.6 }}
       >
-        <h1 className="space-y-1 text-center max-w-xl mx-auto">
-          <span className="block text-2xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-white">Revolutionizing</span>
-          <span className="block text-2xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
+        <h1 className="space-y-1 max-w-xl mx-auto">
+          <span className="block text-xl sm:text-3xl md:text-5xl font-extrabold leading-tight text-white">Revolutionizing</span>
+          <span className="block text-xl sm:text-3xl md:text-5xl font-extrabold leading-tight">
             <span className="bg-gradient-to-r from-accent to-blue-400 text-transparent bg-clip-text">Legal Work With</span>
           </span>
-          <span className="block text-2xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-white">AI Innovation</span>
+          <span className="block text-xl sm:text-3xl md:text-5xl font-extrabold leading-tight text-white">AI Innovation</span>
         </h1>
-        <p className="text-gray-300 text-base md:text-lg max-w-xl mx-auto">
+        <p className="text-gray-300 text-sm sm:text-base md:text-lg max-w-xl mx-auto">
           Cutting-edge AI solutions empowering legal professionals, law
           firms, and enterprises to work smarter and achieve more
         </p>
         {/* Service Buttons: stack vertically on mobile, row on md+ */}
-        <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 sm:mt-8 justify-center items-center">
           <button
             type="button"
             onClick={() => window.open("https://pleadsmart.asvarainnovation.com", "_blank", "noopener,noreferrer")}
@@ -97,28 +98,29 @@ function LoggedOutHero({ logoRef, startFade }: { logoRef: React.RefObject<HTMLDi
 
   return (
     <>
-      {/* Left Card: Hero Content */}
+      {/* Main container for hero cards */}
       <motion.div
-        className="relative z-10 bg-gradient-to-b from-[#111] to-transparent rounded-3xl p-12 flex flex-row items-center shadow-2xl h-full"
+        className="relative z-10 bg-gradient-to-b from-[#111] to-transparent rounded-3xl flex flex-col md:flex-row items-center md:items-stretch shadow-2xl h-full p-4 xs:p-6 md:p-12 gap-4 md:gap-0 w-full"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: startFade ? 1 : 0, y: startFade ? 0 : 20 }}
         transition={{ duration: 1, delay: 0.6 }}
       >
         {/* Left: Logo, name, tagline */}
-        <div className="flex flex-col items-start justify-center flex-1 min-w-[220px] max-w-xl gap-8 px-6 self-center">
-          <div className="relative flex flex-col items-start justify-center h-full w-full gap-6">
-            <div className="absolute -inset-10 rounded-full bg-gradient-to-br from-accent/40 via-blue-700/30 to-transparent blur-2xl animate-pulse z-0" />
-            <div ref={logoRef} className="relative z-10 flex flex-col items-center gap-6 w-full">
+        <div className="flex flex-col items-center justify-center flex-1 w-full max-w-xs xs:max-w-sm sm:max-w-md md:max-w-xl gap-2 xs:gap-4 sm:gap-8 px-2 xs:px-4 sm:px-6 md:px-8 py-4 md:py-0 self-center">
+          <div className="relative flex flex-col items-center justify-center h-full w-full gap-2 xs:gap-4 sm:gap-6">
+            <div className="absolute -inset-1 xs:-inset-2 sm:-inset-10 rounded-full bg-gradient-to-br from-accent/40 via-blue-700/30 to-transparent blur-2xl animate-pulse z-0" />
+            <div ref={logoRef} className="relative z-10 flex flex-col items-center gap-1 xs:gap-2 sm:gap-6 w-full">
               <Image
                 src="/logo-white.png"
                 alt="asvara"
-                width={220}
-                height={220}
-                className="mb-2 drop-shadow-xl"
+                width={60}
+                height={60}
+                className="mb-1 xs:mb-2 sm:mb-2 drop-shadow-xl w-[48px] xs:w-[70px] sm:w-[120px] md:w-[220px] h-auto"
                 priority
+                sizes="(max-width: 400px) 48px, (max-width: 640px) 70px, (max-width: 1024px) 120px, 220px"
               />
-              <h2 className="text-white text-5xl font-bold font-roboto leading-tight">asvara</h2>
-              <p className="text-gray-400 text-2xl font-normal">Legal Eagle On Board</p>
+              <h2 className="text-white text-lg xs:text-xl sm:text-3xl md:text-5xl font-bold font-roboto leading-tight">asvara</h2>
+              <p className="text-gray-400 text-xs xs:text-sm sm:text-lg md:text-2xl font-normal">Legal Eagle On Board</p>
             </div>
           </div>
         </div>
@@ -133,14 +135,14 @@ function LoggedOutHero({ logoRef, startFade }: { logoRef: React.RefObject<HTMLDi
             Cutting-edge AI solutions empowering legal professionals, law firms,
             and enterprises to work smarter and achieve more
           </p>
-          <div className="flex flex-row gap-6 mt-8">
-            <Link href="/auth/register" className="inline-flex items-center rounded-md bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 mt-8 w-full">
+            <Link href="/auth/register" className="inline-flex items-center justify-center rounded-md bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer w-full sm:w-auto">
               Get Started <HiArrowRight className="ml-2 w-5 h-5" />
             </Link>
             <button
               type="button"
               onClick={handleLearnMore}
-              className="inline-flex items-center rounded-md border border-blue-500 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
+              className="inline-flex items-center justify-center rounded-md border border-blue-500 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer w-full sm:w-auto"
             >
               Learn More
             </button>

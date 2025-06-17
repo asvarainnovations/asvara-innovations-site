@@ -13,6 +13,15 @@ export async function POST(req: NextRequest) {
     if (data.excerpt.length > 200) {
       return NextResponse.json({ error: 'Excerpt too long (max 200 chars)' }, { status: 400 });
     }
+    // Store only the path after the bucket for coverImage
+    const coverImage = data.coverImageUrl
+      ? data.coverImageUrl.replace('https://hufynfvixoauwggufgol.supabase.co/storage/v1/object/public/blog-images/', '')
+      : undefined;
+    // Store only the path after the bucket for attachments
+    const attachments = data.attachmentUrls?.map((url: string) => ({
+      url: url.replace('https://hufynfvixoauwggufgol.supabase.co/storage/v1/object/public/blog-attachments/', ''),
+      type: 'file',
+    })) || [];
     const submission = await prisma.blogSubmission.create({
       data: {
         authorName: data.authorName,
@@ -22,9 +31,12 @@ export async function POST(req: NextRequest) {
         excerpt: data.excerpt,
         content: data.content,
         tags: data.tags,
-        coverImage: data.coverImage,
+        coverImage,
         consent: data.consent,
         status: 'PENDING',
+        attachments: {
+          create: attachments,
+        },
       },
     });
     return NextResponse.json({ success: true, id: submission.id });

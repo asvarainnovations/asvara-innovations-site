@@ -190,12 +190,14 @@ export const authOptions: AuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.image = user.image;
       }
       
       console.log('JWT Callback - Output token:', {
         id: token.id,
         role: token.role,
-        email: token.email
+        email: token.email,
+        image: token.image
       });
       
       return token;
@@ -209,11 +211,13 @@ export const authOptions: AuthOptions = {
       if (token && session.user) {
         session.user.id = token.id;
         session.user.role = token.role;
+        session.user.image = token.image;
       }
       
       console.log('Session Callback - Output:', {
         userId: session?.user?.id,
-        userRole: session?.user?.role
+        userRole: session?.user?.role,
+        userImage: session?.user?.image
       });
       
       return session;
