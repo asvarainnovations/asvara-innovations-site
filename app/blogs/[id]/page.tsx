@@ -7,6 +7,10 @@ import { useParams } from "next/navigation";
 import { X } from 'lucide-react';
 import axiosInstance from '@/lib/axios';
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseBlogImageBase = `${supabaseUrl}/storage/v1/object/public/blog-images/`;
+const supabaseAttachmentBase = `${supabaseUrl}/storage/v1/object/public/blog-attachments/`;
+
 export default function BlogDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [post, setPost] = React.useState<any | null>(null);
@@ -82,7 +86,7 @@ export default function BlogDetailPage() {
               <img
                 src={post.coverImage.startsWith('http')
                   ? post.coverImage
-                  : `https://hufynfvixoauwggufgol.supabase.co/storage/v1/object/public/blog-images/${post.coverImage}`}
+                  : supabaseBlogImageBase + post.coverImage}
                 alt="Cover"
                 className="rounded-lg max-h-64 border border-accent/20"
               />
@@ -120,7 +124,7 @@ export default function BlogDetailPage() {
                     <a
                       href={file.url.startsWith('http')
                         ? file.url
-                        : `https://hufynfvixoauwggufgol.supabase.co/storage/v1/object/public/blog-attachments/${file.url}`}
+                        : supabaseAttachmentBase + file.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-accent underline break-all"

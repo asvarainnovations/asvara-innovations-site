@@ -3,8 +3,9 @@ import prismadb from '@/lib/prismadb';
 
 export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
-  const supabaseBlogImageBase = "https://hufynfvixoauwggufgol.supabase.co/storage/v1/object/public/blog-images/";
-  const supabaseAttachmentBase = "https://hufynfvixoauwggufgol.supabase.co/storage/v1/object/public/blog-attachments/";
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseBlogImageBase = `${supabaseUrl}/storage/v1/object/public/blog-images/`;
+  const supabaseAttachmentBase = `${supabaseUrl}/storage/v1/object/public/blog-attachments/`;
   try {
     // Try to find an approved blog post first
     const blog = await prismadb.blogPost.findUnique({

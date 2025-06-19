@@ -15,11 +15,11 @@ export async function POST(req: NextRequest) {
     }
     // Store only the path after the bucket for coverImage
     const coverImage = data.coverImageUrl
-      ? data.coverImageUrl.replace('https://hufynfvixoauwggufgol.supabase.co/storage/v1/object/public/blog-images/', '')
+      ? data.coverImageUrl.replace(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/blog-images/`, '')
       : undefined;
     // Store only the path after the bucket for attachments
     const attachments = data.attachmentUrls?.map((url: string) => ({
-      url: url.replace('https://hufynfvixoauwggufgol.supabase.co/storage/v1/object/public/blog-attachments/', ''),
+      url: url.replace(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/blog-attachments/`, ''),
       type: 'file',
     })) || [];
     const submission = await prisma.blogSubmission.create({

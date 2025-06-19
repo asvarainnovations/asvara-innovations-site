@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
+import { deleteFile } from '@/app/lib/supabase/storage';
 
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
-    const supabaseBlogImageBase = "https://hufynfvixoauwggufgol.supabase.co/storage/v1/object/public/blog-images/";
-    const supabaseAttachmentBase = "https://hufynfvixoauwggufgol.supabase.co/storage/v1/object/public/blog-attachments/";
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseBlogImageBase = `${supabaseUrl}/storage/v1/object/public/blog-images/`;
+    const supabaseAttachmentBase = `${supabaseUrl}/storage/v1/object/public/blog-attachments/`;
     if (id) {
       const submission = await prisma.blogSubmission.findUnique({
         where: { id },
@@ -46,6 +48,26 @@ export async function DELETE(req: Request) {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
     if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+
+    // Fetch the submission with attachments before deleting
+    const submission = await prisma.blogSubmission.findUnique({
+      where: { id },
+      include: { attachments: true },
+    });
+    if (!submission) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    // Delete cover image from storage if present
+    if (submission.coverImage) {
+      await deleteFile("blog-images", submission.coverImage);
+    }
+    // Delete all attachments from storage
+    for (const att of submission.attachments) {
+      if (att.url) {
+        await deleteFile("blog-attachments", att.url);
+      }
+    }
+
+    // Delete the submission (and attachments in DB via cascade)
     await prisma.blogSubmission.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch (error) {

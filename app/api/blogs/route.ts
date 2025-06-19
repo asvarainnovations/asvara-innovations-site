@@ -64,14 +64,14 @@ export async function POST(req: NextRequest) {
         content: validatedData.content,
         // Store only the path after the bucket for coverImage
         coverImage: validatedData.coverImageUrl
-          ? validatedData.coverImageUrl.replace('https://hufynfvixoauwggufgol.supabase.co/storage/v1/object/public/blog-images/', '')
+          ? validatedData.coverImageUrl.replace(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/blog-images/`, '')
           : undefined,
         tags: validatedData.tags || [],
         consent: validatedData.consent,
         attachments: {
           create: validatedData.attachmentUrls?.map(url => ({
             // Store only the path after the bucket for attachments
-            url: url.replace('https://hufynfvixoauwggufgol.supabase.co/storage/v1/object/public/blog-attachments/', ''),
+            url: url.replace(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/blog-attachments/`, ''),
             type: 'file'
           })) || []
         }
