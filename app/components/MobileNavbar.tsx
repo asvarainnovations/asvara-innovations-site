@@ -104,6 +104,13 @@ export default function MobileNavbar({ isMobileMenuOpen, setIsMobileMenuOpen }: 
               >
                 Blogs
               </Link>
+              <Link
+                href="/contact"
+                className="block text-white hover:text-accent transition-colors py-2 rounded"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Contact
+              </Link>
               {session?.user ? (
                 <div className="pt-2">
                   <AvatarDropdown />

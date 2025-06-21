@@ -11,12 +11,13 @@ interface ArticleCardProps {
     category: string;
     readTime: string;
     date: string;
+    href?: string;
   };
 }
 
 export default function ArticleCard({ article }: ArticleCardProps) {
   return (
-    <Link href={`/innovations/${article.id}`}>
+    <Link href={article.href ?? `/innovations/${article.id}`}>
       <div className="group relative bg-white/5 rounded-2xl overflow-hidden border border-white/10 hover:border-accent/50 transition-colors">
         {/* Image Container */}
         <div className="relative h-48 overflow-hidden">

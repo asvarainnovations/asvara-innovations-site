@@ -60,6 +60,9 @@ export default function DesktopNavbar() {
         <Link href="/blogs" className="text-white hover:text-accent transition-colors">
           Blogs
         </Link>
+        <Link href="/contact" className="text-white hover:text-accent transition-colors">
+          Contact
+        </Link>
         {session?.user ? (
           <AvatarDropdown />
         ) : (

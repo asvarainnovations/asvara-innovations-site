@@ -56,14 +56,45 @@ export async function DELETE(req: Request) {
     });
     if (!submission) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
+    // Helper to extract file path from URL
+    const getPathFromUrl = (url: string) => {
+      try {
+        const urlParts = new URL(url);
+        // Path is something like /storage/v1/object/public/bucket-name/file-path
+        const pathSegments = urlParts.pathname.split('/');
+        const bucketIndex = pathSegments.findIndex(segment => segment === 'blog-images' || segment === 'blog-attachments');
+        if (bucketIndex !== -1 && bucketIndex + 1 < pathSegments.length) {
+          return pathSegments.slice(bucketIndex + 1).join('/');
+        }
+      } catch (e) {
+        // Not a full URL, assume it's a path
+        return url;
+      }
+      return url; // Fallback
+    };
+    
     // Delete cover image from storage if present
     if (submission.coverImage) {
-      await deleteFile("blog-images", submission.coverImage);
+      try {
+        const imagePath = getPathFromUrl(submission.coverImage);
+        console.log(`Deleting cover image from blog-images: ${imagePath}`);
+        await deleteFile("blog-images", imagePath);
+      } catch (error) {
+        console.error("Failed to delete cover image:", error);
+      }
     }
     // Delete all attachments from storage
-    for (const att of submission.attachments) {
-      if (att.url) {
-        await deleteFile("blog-attachments", att.url);
+    if (submission.attachments && submission.attachments.length > 0) {
+      for (const att of submission.attachments) {
+        if (att.url) {
+          try {
+            const attachmentPath = getPathFromUrl(att.url);
+            console.log(`Deleting attachment from blog-attachments: ${attachmentPath}`);
+            await deleteFile("blog-attachments", attachmentPath);
+          } catch (error) {
+            console.error(`Failed to delete attachment ${att.id}:`, error);
+          }
+        }
       }
     }
 

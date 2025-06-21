@@ -5,6 +5,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import { useState } from 'react'
 import ProblemSolutionSection from './components/ProblemSolutionSection';
+import ProductSection from './components/ProductSection';
 import FeaturesGrid from './components/FeaturesGrid';
 import HowItWorksSection from './components/HowItWorksSection';
 import ScreenshotsCarousel from './components/ScreenshotsCarousel';
@@ -32,10 +33,11 @@ export default function Home() {
         onFadeHalf={handleHeroComplete}
       />
       <ProblemSolutionSection />
+      <ProductSection />
       <FeaturesGrid />
       <HowItWorksSection />
       {/* <ScreenshotsCarousel /> */}
-      <CallToActionBanner />
+      {/* <CallToActionBanner /> */}
       <Footer />
     </main>
   )

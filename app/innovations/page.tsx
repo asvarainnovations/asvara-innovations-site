@@ -7,30 +7,33 @@ import ArticleCard from "./components/ArticleCard";
 const articles = [
   {
     id: 1,
-    title: "AI-Powered Legal Research Revolution",
-    description: "Discover how our advanced AI algorithms are transforming legal research, making it faster and more accurate than ever before.",
+    title: "PleadSmart",
+    description: "Your On-Demand AI Legal Assistant for research, drafting, and argument building.",
     image: "/images/article1.png",
     category: "Legal Tech",
     readTime: "5 min read",
     date: "2024-03-20",
+    href: "/innovations/pleadsmart"
   },
   {
     id: 2,
-    title: "Automated Document Analysis",
-    description: "Learn how our machine learning models can analyze complex legal documents with unprecedented accuracy and speed.",
+    title: "DocBare",
+    description: "AI-Powered Contract & Draft Analyzer for clause-by-clause legal review.",
     image: "/images/article2.png",
     category: "Innovation",
     readTime: "7 min read",
     date: "2024-03-18",
+    href: "/innovations/docbare"
   },
   {
     id: 3,
-    title: "Predictive Analytics in Legal Practice",
-    description: "Explore how data-driven insights can help predict case outcomes and make better legal decisions.",
+    title: "AI Court Room",
+    description: "A Virtual Courtroom to Simulate Real Trials, Test Arguments, Predict Outcomes, and Resolve Disputes.",
     image: "/images/article3.png",
     category: "Analytics",
     readTime: "6 min read",
     date: "2024-03-15",
+    href: "/innovations/aicourt"
   }
 ];
 

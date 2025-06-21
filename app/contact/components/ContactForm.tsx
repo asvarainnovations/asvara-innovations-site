@@ -1,24 +1,80 @@
 "use client";
-import React from "react";
 
-type ContactFormProps = {
-  isSubmitting: boolean;
-  formData: {
-    name: string;
-    email: string;
-    subject: string;
-    message: string;
-  };
-  handleChange: (
+import React, { useState } from "react";
+import emailjs from '@emailjs/browser';
+import { emailConfig } from '@/lib/emailjs';
+import { toast } from 'sonner';
+import { motion } from 'framer-motion';
+
+const subjects = [
+  "General Inquiry",
+  "Technical Support",
+  "Billing Question",
+  "Feature Request",
+  "Partnership Opportunity",
+  "Other",
+];
+
+export default function ContactForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: subjects[0],
+    message: "",
+  });
+
+  const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => void;
-  handleSubmit: (e: React.FormEvent) => void;
-  subjects: string[];
-};
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-export default function ContactForm({ isSubmitting, formData, handleChange, handleSubmit, subjects }: ContactFormProps) {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const templateParams = {
+        to_name: "Asvara Support Team",
+        from_name: formData.name,
+        from_email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+        reply_to: formData.email,
+      };
+
+      await emailjs.send(
+        emailConfig.serviceId,
+        emailConfig.templateId,
+        templateParams,
+        { publicKey: emailConfig.publicKey }
+      );
+
+      toast.success("Message sent successfully! We'll get back to you soon.");
+      setFormData({
+        name: "",
+        email: "",
+        subject: subjects[0],
+        message: "",
+      });
+    } catch (error) {
+      console.error("EmailJS error:", error);
+      toast.error("Failed to send message. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const inputClass = "w-full px-4 py-3 rounded-md bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none";
+
   return (
-    <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 p-8">
+    <div className="bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12 w-full">
+      <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Send us a message</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid md:grid-cols-2 gap-6">
           <div>
@@ -29,8 +85,9 @@ export default function ContactForm({ isSubmitting, formData, handleChange, hand
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
+              className={inputClass}
               required
+              placeholder="John Doe"
             />
           </div>
           <div>
@@ -41,8 +98,9 @@ export default function ContactForm({ isSubmitting, formData, handleChange, hand
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
+              className={inputClass}
               required
+              placeholder="john.doe@example.com"
             />
           </div>
         </div>
@@ -53,11 +111,11 @@ export default function ContactForm({ isSubmitting, formData, handleChange, hand
             name="subject"
             value={formData.subject}
             onChange={handleChange}
-            className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
+            className={inputClass}
             required
           >
             {subjects.map((subject) => (
-              <option key={subject} value={subject}>{subject}</option>
+              <option key={subject} value={subject} className="bg-[#0E0E10] text-white">{subject}</option>
             ))}
           </select>
         </div>
@@ -68,18 +126,21 @@ export default function ContactForm({ isSubmitting, formData, handleChange, hand
             name="message"
             value={formData.message}
             onChange={handleChange}
-            rows={6}
-            className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
+            rows={5}
+            className={inputClass}
             required
+            placeholder="How can we help you?"
           />
         </div>
-        <button
+        <motion.button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-accent text-white py-3 rounded-xl font-semibold hover:bg-accent/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-blue-500 text-white py-3 rounded-md font-semibold hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
           {isSubmitting ? "Sending..." : "Send Message"}
-        </button>
+        </motion.button>
       </form>
     </div>
   );

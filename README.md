@@ -97,36 +97,54 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## Progress
 
 ### ✅ Completed
-- Google OAuth authentication (NextAuth.js)
-- Credentials-based registration and login
-- User profile management (update full name)
-- Subscription management (create, list, auto-create on Google signup)
-- API key management (create, list, delete)
-- Plans listing (for default service)
-- Database integration with Prisma ORM and Supabase
-- Database seeding and migrations
-- All core API endpoints for MVP
+- **Authentication**: Google OAuth (NextAuth.js) and credentials-based registration/login.
+- **User Management**: Profile updates and dashboard.
+- **API & Subscriptions**: API key management and subscription creation/listing.
+- **Database**: Full integration with Prisma ORM and Supabase, including migrations and seeding.
+- **Blog System**:
+  - Complete blog submission flow with cover image and file attachments.
+  - Integration with Supabase Storage for file uploads.
+  - Admin moderation dashboard to review, approve, and reject submissions.
+  - Backend APIs for blog management with authentication checks.
+- **Frontend & UI/UX**:
+  - Complete redesign of the homepage for a modern, animated feel.
+  - Dynamic "Our Products" section with complex hover animations.
+  - Refactored "Innovations" section with dedicated pages for each product.
+  - Polished "Problem/Solution" section.
+  - Added "About Us" page.
 
 ### 🚧 TODO / In Progress
-- **/api/auth/login**: Issue JWT or session token after successful login (currently only returns user info)
-- **/api/subscribe**: Integrate with payment/subscription backend (currently just logs request)
-- **/api/log-innovation-click**: Save click events to database or analytics service (currently just logs to console)
-- **/api/upload**: Implement file parsing and storage (currently just logs upload request)
-- **API Key Management**: Make `serviceId` dynamic (currently hardcoded to 'default')
-- Add input validation and improved error handling for all endpoints
-- Add rate limiting and security hardening (helmet, CORS, etc.)
-- Add logging and monitoring for production
-- Add unit/integration tests for all APIs
-- Improve user feedback on frontend for all actions
-- Add UI for managing API keys, subscriptions, and uploaded files (if not already present)
-- Document all API endpoints and request/response formats
-- Add setup and deployment instructions for contributors
-- **Implement authentication/authorization checks for admin/editor endpoints (blogs/admin)**
-- **Integrate file/image upload with Supabase Storage**
-- **Add input validation and error handling to all blog APIs**
-- **Connect frontend blog pages to APIs for dynamic data**
-- **Polish UI/UX, add real WYSIWYG, markdown rendering, and all advanced features**
+- **Storage**: Fix bug where files are not deleted from Supabase Storage when a blog post is deleted.
+- **/api/auth/login**: Issue JWT or session token after successful login (currently only returns user info).
+- **/api/subscribe**: Integrate with payment/subscription backend (currently just logs request).
+- **/api/log-innovation-click**: Save click events to database or analytics service (currently just logs to console).
+- **API Key Management**: Make `serviceId` dynamic (currently hardcoded to 'default').
+- **General**:
+  - Add comprehensive input validation and improved error handling for all endpoints.
+  - Add rate limiting and security hardening (helmet, CORS, etc.).
+  - Add logging and monitoring for production.
+  - Add unit/integration tests for all APIs.
+- **Docs**:
+  - Document all API endpoints and request/response formats.
+  - Add setup and deployment instructions for contributors.
+- **Blog Features**:
+  - Add a rich text (WYSIWYG) editor for blog submissions.
+  - Implement public-facing blog pages with markdown rendering.
 
 ## API Endpoints
 - `POST /api/auth/register` — Register a new user
 - `POST /api/auth/login` — Login with email/password
+- `GET /api/user/profile` — Get user profile
+- `PUT /api/user/profile` — Update user profile
+- `POST /api/subscriptions` — Create a new subscription
+- `GET /api/subscriptions` — Get user's subscriptions
+- `POST /api/api-keys` — Create a new API key
+- `GET /api/api-keys` — Get user's API keys
+- `DELETE /api/api-keys/:id` — Delete an API key
+- `GET /api/plans` — Get available plans
+- `POST /api/log-innovation-click` — Log a click on an innovation
+- `POST /api/upload` — Upload a file
+- `POST /api/blogs/submit` — Submit a new blog post
+- `GET /api/admin/blog-submissions` — Get all blog submissions (admin)
+- `POST /api/admin/blog-submissions/moderate` — Approve/reject a submission (admin)
+- `DELETE /api/admin/blog-submissions/:id` — Delete a submission (admin)

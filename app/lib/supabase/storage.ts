@@ -44,14 +44,26 @@ export const deleteFile = async (
   path: string
 ): Promise<{ error: Error | null }> => {
   try {
-    const { error } = await supabase.storage
+    // For deletion, we need to use the service role key which has admin privileges.
+    // This should only be called from server-side code.
+    const supabaseAdmin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
+    const { data, error } = await supabaseAdmin.storage
       .from(bucket)
       .remove([path]);
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase delete error:', error.message);
+      throw error;
+    }
+    
+    console.log('Successfully deleted file:', path, 'from bucket:', bucket, 'Data:', data);
     return { error: null };
   } catch (error) {
-    console.error('Error deleting file:', error);
+    console.error('Error in deleteFile function:', error);
     return { error: error as Error };
   }
 };
