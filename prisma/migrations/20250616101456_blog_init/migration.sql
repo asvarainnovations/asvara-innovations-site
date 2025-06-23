@@ -82,17 +82,6 @@ CREATE TABLE "BlogVersion" (
 );
 
 -- CreateTable
-CREATE TABLE "BlogComment" (
-    "id" TEXT NOT NULL,
-    "postId" TEXT NOT NULL,
-    "author" TEXT NOT NULL,
-    "content" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "BlogComment_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "_PostTags" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
@@ -130,9 +119,6 @@ ALTER TABLE "BlogAttachment" ADD CONSTRAINT "BlogAttachment_submissionId_fkey" F
 
 -- AddForeignKey
 ALTER TABLE "BlogVersion" ADD CONSTRAINT "BlogVersion_postId_fkey" FOREIGN KEY ("postId") REFERENCES "BlogPost"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "BlogComment" ADD CONSTRAINT "BlogComment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "BlogPost"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_PostTags" ADD CONSTRAINT "_PostTags_A_fkey" FOREIGN KEY ("A") REFERENCES "BlogPost"("id") ON DELETE CASCADE ON UPDATE CASCADE;

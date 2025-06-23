@@ -178,7 +178,6 @@ model BlogPost {
   publishedAt   DateTime?
   editorId      String?
   versions      BlogVersion[]
-  comments      BlogComment[]
   submission    BlogSubmission? @relation("PostSubmission", fields: [submissionId], references: [id])
   submissionId  String? @unique
 }
@@ -234,13 +233,4 @@ model BlogVersion {
   content   String
   createdAt DateTime @default(now())
   editorId  String?
-}
-
-model BlogComment {
-  id        String   @id @default(uuid())
-  post      BlogPost @relation(fields: [postId], references: [id])
-  postId    String
-  author    String
-  content   String
-  createdAt DateTime @default(now())
 }

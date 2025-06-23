@@ -228,5 +228,5 @@ export const authOptions: AuthOptions = {
     error: "/auth/error",
   },
   secret: process.env.NEXTAUTH_SECRET,
-  debug: true, // Enable debug mode to see all NextAuth.js logs
+  debug: false, // Disable debug mode for production
 };
