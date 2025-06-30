@@ -599,8 +599,8 @@ export default function PrivacyPolicyPage() {
                       Our services are intended for professionals aged 18 and
                       above. We do not knowingly collect personal data from
                       minors who are below the age of 14.
-                    </p>
-                  </div>
+                      </p>
+                    </div>
                 </section>
 
                 <section id="changes-policy" className="scroll-mt-[100px]">

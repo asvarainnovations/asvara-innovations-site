@@ -89,18 +89,6 @@ export const GlassmorphismPolicyCard = ({ policy, index }: { policy: any; index:
           {/* Description */}
           <p className="text-gray-300 text-sm leading-relaxed mb-6 line-clamp-3">{policy.description}</p>
 
-          {/* Stats row */}
-          <div className="flex items-center justify-between text-xs text-gray-400 mb-6">
-            <div className="flex items-center">
-              <Clock className="w-3 h-3 mr-1" />
-              <span>5 min read</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse" />
-              <span>Live</span>
-            </div>
-          </div>
-
           {/* CTA Button */}
           <Link href={policy.href}>
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
@@ -115,7 +103,7 @@ export const GlassmorphismPolicyCard = ({ policy, index }: { policy: any; index:
                   transition={{ duration: 0.8 }}
                 />
                 <span className="relative flex items-center justify-center">
-                  Explore Policy
+                  View Policy
                   <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </span>
               </Button>

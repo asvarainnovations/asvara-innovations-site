@@ -107,10 +107,10 @@ export default function Footer() {
               © {new Date().getFullYear()} Asvara Innovations. All rights reserved.
             </p>
             <div className="flex space-x-6">
-              <Link href="/privacy" className="text-gray-400 hover:text-accent text-sm transition-colors">
+              <Link href="/policies/privacy" className="text-gray-400 hover:text-accent text-sm transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="text-gray-400 hover:text-accent text-sm transition-colors">
+              <Link href="/policies/terms" className="text-gray-400 hover:text-accent text-sm transition-colors">
                 Terms of Service
               </Link>
             </div>

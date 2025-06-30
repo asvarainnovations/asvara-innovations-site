@@ -11,4 +11,10 @@ if (typeof window !== 'undefined') {
   emailjs.init(emailConfig.publicKey);
 }
 
-export { emailConfig }; 
+export { emailConfig };
+
+export const emailConfigEA = {
+  serviceId: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID_EA || '',
+  templateId: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID_EA || '',
+  publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || '',
+}; 
