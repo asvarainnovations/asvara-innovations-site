@@ -77,11 +77,11 @@ export default function ContactPage() {
         </SectionWrapper>
 
         {/* Contact Info Section */}
-        <SectionWrapper className="py-10 md:py-20">
+        {/* <SectionWrapper className="py-10 md:py-20">
             <div className="max-w-6xl mx-auto px-6">
                 <ContactInfoGrid contactInfo={contactInfo} />
             </div>
-        </SectionWrapper>
+        </SectionWrapper> */}
 
         {/* Contact Form Section */}
         <SectionWrapper className="pb-20 md:pb-28">

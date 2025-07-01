@@ -9,27 +9,24 @@ export default function Footer() {
       title: "Company",
       links: [
         { name: "About Us", href: "/about" },
-        { name: "Our Team", href: "/team" },
         { name: "Careers", href: "/careers" },
         { name: "Contact", href: "/contact" },
       ],
     },
-    solutions: {
-      title: "Solutions",
+    products: {
+      title: "Products",
       links: [
-        { name: "Legal Research", href: "/solutions/legal-research" },
-        { name: "Document Review", href: "/solutions/document-review" },
-        { name: "Contract Analysis", href: "/solutions/contract-analysis" },
-        { name: "Case Management", href: "/solutions/case-management" },
+        { name: "PleadSmart", href: "/innovations/pleadsmart" },
+        { name: "Docbare", href: "/innovations/docbare" },
+        { name: "AI Court Room", href: "/innovations/aicourt" },
       ],
     },
     resources: {
       title: "Resources",
       links: [
-        { name: "Blog", href: "/blog" },
-        { name: "Documentation", href: "/docs" },
-        { name: "Case Studies", href: "/case-studies" },
-        { name: "Support", href: "/support" },
+        { name: "Blog", href: "/blogs" },
+        { name: "Innovations", href: "/innovations" },
+        { name: "Help Center", href: "/help" },
       ],
     },
   };

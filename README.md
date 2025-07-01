@@ -106,6 +106,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
   - Integration with Supabase Storage for file uploads.
   - Admin moderation dashboard to review, approve, and reject submissions.
   - Backend APIs for blog management with authentication checks.
+- **Careers System**:
+  - Universal careers application form with inline validation and file upload.
+  - Resumes are uploaded and stored in Supabase Storage.
+  - All submissions are viewable in a modern admin dashboard at `/admin/careers` with search, filter, and download links for resumes.
 - **Frontend & UI/UX**:
   - Complete redesign of the homepage for a modern, animated feel.
   - Dynamic "Our Products" section with complex hover animations.
@@ -114,6 +118,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
   - Added "About Us" page.
 
 ### 🚧 TODO / In Progress
+- Update database schema for /admin/careers page
 - **Storage**: Fix bug where files are not deleted from Supabase Storage when a blog post is deleted.
 - **/api/auth/login**: Issue JWT or session token after successful login (currently only returns user info).
 - **/api/subscribe**: Integrate with payment/subscription backend (currently just logs request).

@@ -9,30 +9,30 @@ const articles = [
     id: 1,
     title: "PleadSmart",
     description: "Your On-Demand AI Legal Assistant for research, drafting, and argument building.",
-    image: "/images/article1.png",
+    image: "/products/pleadsmart-illustration.png",
     category: "Legal Tech",
-    readTime: "5 min read",
-    date: "2024-03-20",
+    readTime: "10 min read",
+    date: "2025-07-01",
     href: "/innovations/pleadsmart"
   },
   {
     id: 2,
     title: "DocBare",
     description: "AI-Powered Contract & Draft Analyzer for clause-by-clause legal review.",
-    image: "/images/article2.png",
+    image: "/products/docbare-illustration.png",
     category: "Innovation",
-    readTime: "7 min read",
-    date: "2024-03-18",
+    readTime: "5 min read",
+    date: "2025-07-01",
     href: "/innovations/docbare"
   },
   {
     id: 3,
     title: "AI Court Room",
     description: "A Virtual Courtroom to Simulate Real Trials, Test Arguments, Predict Outcomes, and Resolve Disputes.",
-    image: "/images/article3.png",
-    category: "Analytics",
-    readTime: "6 min read",
-    date: "2024-03-15",
+    image: "/products/aicourt-illustration.png",
+    category: "Simulation",
+    readTime: "15 min read",
+    date: "2025-07-01",
     href: "/innovations/aicourt"
   }
 ];

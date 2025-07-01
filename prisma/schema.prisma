@@ -234,3 +234,16 @@ model BlogVersion {
   createdAt DateTime @default(now())
   editorId  String?
 }
+
+model CareerSubmission {
+  id         String   @id @default(uuid())
+  name       String
+  email      String
+  phone      String
+  position   String
+  linkedin   String?
+  portfolio  String?
+  cover      String?
+  resumeUrl  String
+  createdAt  DateTime @default(now())
+}

@@ -70,7 +70,7 @@ export default function AboutPage() {
 
       {/* 2. Company Story */}
       <section className="py-12 md:py-16 w-full">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 px-4 md:px-8 items-start">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-20 md:gap-20 px-4 md:px-20 items-center">
           {/* Left: About Us content (only first paragraph) */}
           <div className="relative">
             <div className="absolute left-0 top-0 h-full w-1 bg-[#2979FF] rounded" aria-hidden="true"></div>
@@ -97,23 +97,60 @@ export default function AboutPage() {
       <section className="py-12 md:py-16 w-full">
         <div className="max-w-6xl mx-auto flex flex-col items-center px-4">
           <h2 className="text-[2rem] font-extrabold mb-8 text-center">Meet Our Founders</h2>
-          <div className="bg-[#18181C] border border-[#C0C0C0] rounded-2xl shadow-lg p-8 md:p-12 w-full max-w-3xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:shadow-blue-900/30">
-            {/* Accent bar */}
-            <div className="w-16 h-1 bg-gradient-to-r from-[#2979FF] to-[#A6A6A6] rounded-full mx-auto mb-4" />
-            <div className="w-full flex flex-col items-center mb-8">
-              <Image src="/images/about-image.jpg" alt="Founders group photo" width={600} height={220} className="rounded-xl object-cover w-full max-w-2xl h-56 md:h-64 border border-[#23232A]" />
-              <div className="flex flex-row gap-2 mt-4 w-full justify-center items-center text-lg font-bold">
-                <span>Sajal Anand</span>
-                <span className="text-[#2979FF] text-2xl">•</span>
-                <span>Rajat Balyan</span>
+          <div className="flex flex-col md:flex-row justify-center items-start gap-12 mb-10 w-full">
+            {/* Sajal */}
+            <div className="flex flex-col items-center flex-1">
+            <div className="w-40 h-40 md:w-48 md:h-48 bg-[#23233a] rounded-full mb-4 flex items-center justify-center text-5xl font-bold text-[#2979FF] shadow-lg border-4 border-[#2979FF]/30 overflow-hidden relative">
+                <Image
+                  src="/team/sajal.jpeg"
+                  alt="Sajal Anand"
+                  width={150}
+                  height={150}
+                  className="object-cover w-full h-full rounded-full"
+                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                />
               </div>
+              <div className="font-bold text-xl mt-1 mb-4 text-center">Sajal Anand</div>
+              <a
+                href="https://www.linkedin.com/in/sajal-anand-508993215/"
+                target="_blank"
+                rel="noopener"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#2979FF] text-white text-base font-bold shadow hover:bg-[#1761c7] transition mb-2"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm13.5 10.28h-3v-4.5c0-1.08-.02-2.47-1.5-2.47-1.5 0-1.73 1.17-1.73 2.39v4.58h-3v-9h2.89v1.23h.04c.4-.75 1.38-1.54 2.84-1.54 3.04 0 3.6 2 3.6 4.59v4.72z"/></svg>
+                LinkedIn
+              </a>
             </div>
-            {/* Only the first two paragraphs: intro + both bios, as paragraphs */}
-            <div className="text-[#A6A6A6] text-base leading-relaxed space-y-4 mt-2">
-              <p>Our co-founders bring together uniquely complementary strengths:</p>
-              <p><strong>Sajal Anand</strong>, a lawyer by training, leads the legal, strategic, and data architecture efforts at Asvara. With deep insight into case law, litigation workflows, and compliance challenges, he ensures that our AI tools remain grounded in the realities of legal practice. As a key driver of Asvara's vision, Sajal plays a crucial role in shaping the direction of the company—curating legal datasets, designing contextual argument frameworks, and embedding ethical reasoning into our models.</p>
-              <p><strong>Rajat Balyan</strong>, the technical mind behind Asvara, oversees the development of our technology stack. A dedicated and innovative engineer, he leads the architecture, infrastructure, and machine learning development of all our products. Rajat is responsible for ensuring that our platforms are robust, scalable, and secure—powering the intelligence that drives PleadSmart, Docbare, and AI Court Room with performance and precision.</p>
+            {/* Rajat */}
+            <div className="flex flex-col items-center flex-1">
+              <div className="w-40 h-40 md:w-48 md:h-48 bg-[#23233a] rounded-full mb-4 flex items-center justify-center text-5xl font-bold text-[#2979FF] shadow-lg border-4 border-[#2979FF]/30 overflow-hidden relative">
+                <Image
+                  src="/team/rajat.png"
+                  alt="Rajat Balyan"
+                  width={192}
+                  height={192}
+                  className="object-cover w-full h-full rounded-full"
+                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                />
+              </div>
+              <div className="font-bold text-xl mt-1 mb-4 text-center">Rajat Balyan</div>
+              <a
+                href="https://www.linkedin.com/in/rajat-balyan/"
+                target="_blank"
+                rel="noopener"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#2979FF] text-white text-base font-bold shadow hover:bg-[#1761c7] transition mb-2"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm13.5 10.28h-3v-4.5c0-1.08-.02-2.47-1.5-2.47-1.5 0-1.73 1.17-1.73 2.39v4.58h-3v-9h2.89v1.23h.04c.4-.75 1.38-1.54 2.84-1.54 3.04 0 3.6 2 3.6 4.59v4.72z"/></svg>
+                LinkedIn
+              </a>
             </div>
+          </div>
+          <div className="bg-[#18181b] rounded-xl p-6 text-lg max-w-2xl mx-auto text-justify">
+            <span className="block font-semibold text-center mb-4">Our co-founders bring together uniquely complementary strengths:</span>
+            <span className="font-normal">
+            <b>Sajal Anand</b>, a lawyer by training, leads the legal, strategic, and data architecture efforts at Asvara. With deep insight into case law, litigation workflows, and compliance challenges, he ensures that our AI tools remain grounded in the realities of legal practice. As a key driver of Asvara's vision, Sajal plays a crucial role in shaping the direction of the company—curating legal datasets, designing contextual argument frameworks, and embedding ethical reasoning into our models.<br /><br />
+            <b>Rajat Balyan</b>, the technical mind behind Asvara, oversees the development of our technology stack. A dedicated and innovative engineer, he leads the architecture, infrastructure, and machine learning development of all our products. Rajat is responsible for ensuring that our platforms are robust, scalable, and secure—powering the intelligence that drives PleadSmart, Docbare, and AI Court Room with performance and precision.
+            </span>
           </div>
         </div>
       </section>
