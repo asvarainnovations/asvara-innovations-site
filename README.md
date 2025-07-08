@@ -1,5 +1,17 @@
 # Asvara Innovations Site
 
+## Google Cloud Platform (GCP) Setup
+
+This application now uses Google Cloud Platform for backend services. Please refer to [GCP_SETUP.md](./GCP_SETUP.md) for detailed setup instructions.
+
+### Quick Setup
+
+1. Follow the [GCP Setup Guide](./GCP_SETUP.md) to configure Google Cloud SQL and Cloud Storage
+2. Create a `.env.local` file with the required environment variables
+3. Install dependencies: `npm install`
+4. Run database migrations: `npx prisma migrate deploy`
+5. Start the development server: `npm run dev`
+
 ## Google Authentication Setup
 
 1. Create a `.env.local` file in the root directory with the following content:
@@ -71,28 +83,49 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-## Backend Setup (Prisma + Supabase)
+## Backend Setup (Prisma + Google Cloud SQL)
 
-1. Set your Supabase PostgreSQL connection string in `.env`:
+1. Follow the [GCP Setup Guide](./GCP_SETUP.md) for detailed instructions
+2. Set your Google Cloud SQL PostgreSQL connection string in `.env.local`:
    ```
-   DATABASE_URL="postgresql://<username>:<password>@<host>:<port>/<database>"
+   DATABASE_URL="postgresql://username:password@host:port/database"
    ```
-2. Install dependencies:
+3. Install dependencies:
    ```
    npm install
    ```
-3. Run Prisma migration:
+4. Run Prisma migration:
    ```
    npx prisma migrate dev --name init
    ```
-4. Generate Prisma client:
+5. Generate Prisma client:
    ```
    npx prisma generate
    ```
-5. Start the development server:
+6. Start the development server:
    ```
    npm run dev
    ```
+
+## Testing Your GCP Database Setup
+
+After setting up your environment and before running your app, you can use the following test scripts to verify your database connection and seeding:
+
+### 1. Test Database Connection
+This script checks if your app can connect to the GCP PostgreSQL database, prints the PostgreSQL version, and lists all tables.
+
+```bash
+npm run test:db
+```
+
+### 2. Test Database Seeding
+This script runs your Prisma seed script and checks if at least one user exists (or skips if no user model).
+
+```bash
+npm run test:db:seed
+```
+
+If both scripts complete successfully, your database connection and seeding are working!
 
 ## Progress
 
@@ -100,15 +133,16 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - **Authentication**: Google OAuth (NextAuth.js) and credentials-based registration/login.
 - **User Management**: Profile updates and dashboard.
 - **API & Subscriptions**: API key management and subscription creation/listing.
-- **Database**: Full integration with Prisma ORM and Supabase, including migrations and seeding.
+- **Database**: Full integration with Prisma ORM and Google Cloud SQL, including migrations and seeding.
+- **Storage**: Google Cloud Storage integration for file uploads and management.
 - **Blog System**:
   - Complete blog submission flow with cover image and file attachments.
-  - Integration with Supabase Storage for file uploads.
+  - Integration with Google Cloud Storage for file uploads.
   - Admin moderation dashboard to review, approve, and reject submissions.
   - Backend APIs for blog management with authentication checks.
 - **Careers System**:
   - Universal careers application form with inline validation and file upload.
-  - Resumes are uploaded and stored in Supabase Storage.
+  - Resumes are uploaded and stored in Google Cloud Storage.
   - All submissions are viewable in a modern admin dashboard at `/admin/careers` with search, filter, and download links for resumes.
 - **Frontend & UI/UX**:
   - Complete redesign of the homepage for a modern, animated feel.
@@ -118,8 +152,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
   - Added "About Us" page.
 
 ### 🚧 TODO / In Progress
-- Update database schema for /admin/careers page
-- **Storage**: Fix bug where files are not deleted from Supabase Storage when a blog post is deleted.
+- **Storage**: Implement file cleanup for deleted blog posts in Google Cloud Storage.
 - **/api/auth/login**: Issue JWT or session token after successful login (currently only returns user info).
 - **/api/subscribe**: Integrate with payment/subscription backend (currently just logs request).
 - **/api/log-innovation-click**: Save click events to database or analytics service (currently just logs to console).

@@ -68,14 +68,14 @@ function LoggedInHero({ logoRef, startFade }: { logoRef: React.RefObject<HTMLDiv
           <button
             type="button"
             onClick={() => window.open("https://docbare.asvarainnovation.com", "_blank", "noopener,noreferrer")}
-            className="inline-flex items-center justify-center rounded-md bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+            className="inline-flex items-center justify-center rounded-md bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             DocBare
           </button>
           <button
             type="button"
             onClick={() => window.open("https://aicourt.asvarainnovation.com", "_blank", "noopener,noreferrer")}
-            className="inline-flex items-center justify-center rounded-md bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+            className="inline-flex items-center justify-center rounded-md bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             AI Court
           </button>

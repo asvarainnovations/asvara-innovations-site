@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { uploadFile } from '@/app/lib/supabase/storage';
+import { uploadFile } from '@/lib/gcp/storage';
+import { BUCKETS } from '@/lib/gcp-config';
 import prisma from '@/lib/prismadb';
 
 export async function POST(req: NextRequest) {
@@ -18,10 +19,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
     }
 
-    // Upload resume to Supabase storage
+    // Upload resume to Google Cloud Storage
     const { url: resumeUrl, error: uploadError } = await uploadFile(
       resume,
-      'resumes', // Supabase bucket name
+      BUCKETS.RESUMES,
       'careers'
     );
     if (uploadError || !resumeUrl) {

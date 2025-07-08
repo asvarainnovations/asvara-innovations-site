@@ -1,30 +1,31 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
-import { deleteFile } from '@/app/lib/supabase/storage';
+import { deleteFile, getSignedUrlForPublic } from '@/lib/gcp/storage';
+import { BUCKETS } from '@/lib/gcp-config';
 
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseBlogImageBase = `${supabaseUrl}/storage/v1/object/public/blog-images/`;
-    const supabaseAttachmentBase = `${supabaseUrl}/storage/v1/object/public/blog-attachments/`;
+    
     if (id) {
       const submission = await prisma.blogSubmission.findUnique({
         where: { id },
         include: { attachments: true },
       });
       if (!submission) return NextResponse.json({ error: "Not found" }, { status: 404 });
-      // Transform coverImage and attachments to full URLs
-      const coverImage = submission.coverImage
-        ? (submission.coverImage.startsWith("http")
-            ? submission.coverImage
-            : supabaseBlogImageBase + submission.coverImage)
-        : null;
-      const attachments = (submission.attachments || []).map(a => ({
+      
+      // Generate signed URL for coverImage
+      let coverImage = null;
+      if (submission.coverImage) {
+        const { url } = await getSignedUrlForPublic(BUCKETS.BLOG_IMAGES, submission.coverImage);
+        coverImage = url;
+      }
+      // Generate signed URLs for attachments
+      const attachments = await Promise.all((submission.attachments || []).map(async a => ({
         ...a,
-        url: a.url.startsWith("http") ? a.url : supabaseAttachmentBase + a.url,
-      }));
+        url: a.url ? (await getSignedUrlForPublic(BUCKETS.BLOG_ATTACHMENTS, a.url)).url : null,
+      })));
       return NextResponse.json({
         submission: {
           ...submission,
@@ -35,8 +36,26 @@ export async function GET(req: Request) {
     }
     const submissions = await prisma.blogSubmission.findMany({
       orderBy: { createdAt: "desc" },
+      include: { attachments: true },
     });
-    return NextResponse.json({ submissions });
+    // Add signed URLs for all submissions
+    const submissionsWithUrls = await Promise.all(submissions.map(async (submission) => {
+      let coverImage = null;
+      if (submission.coverImage) {
+        const { url } = await getSignedUrlForPublic(BUCKETS.BLOG_IMAGES, submission.coverImage);
+        coverImage = url;
+      }
+      const attachments = await Promise.all((submission.attachments || []).map(async a => ({
+        ...a,
+        url: a.url ? (await getSignedUrlForPublic(BUCKETS.BLOG_ATTACHMENTS, a.url)).url : null,
+      })));
+      return {
+        ...submission,
+        coverImage,
+        attachments,
+      };
+    }));
+    return NextResponse.json({ submissions: submissionsWithUrls });
   } catch (error) {
     console.error("Error fetching blog submissions:", error);
     return NextResponse.json({ error: "Failed to fetch blog submissions" }, { status: 500 });
@@ -56,41 +75,40 @@ export async function DELETE(req: Request) {
     });
     if (!submission) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-    // Helper to extract file path from URL
-    const getPathFromUrl = (url: string) => {
+    // Helper to extract file path from GCS URL
+    const getPathFromUrl = (url: string, bucketName: string) => {
       try {
-        const urlParts = new URL(url);
-        // Path is something like /storage/v1/object/public/bucket-name/file-path
-        const pathSegments = urlParts.pathname.split('/');
-        const bucketIndex = pathSegments.findIndex(segment => segment === 'blog-images' || segment === 'blog-attachments');
-        if (bucketIndex !== -1 && bucketIndex + 1 < pathSegments.length) {
-          return pathSegments.slice(bucketIndex + 1).join('/');
+        const gcsUrl = `https://storage.googleapis.com/${bucketName}/`;
+        if (url.startsWith(gcsUrl)) {
+          return url.replace(gcsUrl, '');
         }
+        // If it's already a path, return as is
+        return url;
       } catch (e) {
         // Not a full URL, assume it's a path
         return url;
       }
-      return url; // Fallback
     };
     
     // Delete cover image from storage if present
     if (submission.coverImage) {
       try {
-        const imagePath = getPathFromUrl(submission.coverImage);
-        console.log(`Deleting cover image from blog-images: ${imagePath}`);
-        await deleteFile("blog-images", imagePath);
+        const imagePath = getPathFromUrl(submission.coverImage, BUCKETS.BLOG_IMAGES);
+        console.log(`Deleting cover image from ${BUCKETS.BLOG_IMAGES}: ${imagePath}`);
+        await deleteFile(BUCKETS.BLOG_IMAGES, imagePath);
       } catch (error) {
         console.error("Failed to delete cover image:", error);
       }
     }
+    
     // Delete all attachments from storage
     if (submission.attachments && submission.attachments.length > 0) {
       for (const att of submission.attachments) {
         if (att.url) {
           try {
-            const attachmentPath = getPathFromUrl(att.url);
-            console.log(`Deleting attachment from blog-attachments: ${attachmentPath}`);
-            await deleteFile("blog-attachments", attachmentPath);
+            const attachmentPath = getPathFromUrl(att.url, BUCKETS.BLOG_ATTACHMENTS);
+            console.log(`Deleting attachment from ${BUCKETS.BLOG_ATTACHMENTS}: ${attachmentPath}`);
+            await deleteFile(BUCKETS.BLOG_ATTACHMENTS, attachmentPath);
           } catch (error) {
             console.error(`Failed to delete attachment ${att.id}:`, error);
           }

@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prismadb from '@/lib/prismadb';
+import { getSignedUrlForPublic } from '@/lib/gcp/storage';
+import { BUCKETS } from '@/lib/gcp-config';
 
 export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseBlogImageBase = `${supabaseUrl}/storage/v1/object/public/blog-images/`;
-  const supabaseAttachmentBase = `${supabaseUrl}/storage/v1/object/public/blog-attachments/`;
   try {
     // Try to find an approved blog post first
     const blog = await prismadb.blogPost.findUnique({
@@ -16,15 +15,15 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
       },
     });
     if (blog) {
-      const coverImage = blog.coverImage
-        ? (blog.coverImage.startsWith("http")
-            ? blog.coverImage
-            : supabaseBlogImageBase + blog.coverImage)
-        : null;
-      const attachments = (blog.attachments || []).map(a => ({
+      let coverImage = null;
+      if (blog.coverImage) {
+        const { url } = await getSignedUrlForPublic(BUCKETS.BLOG_IMAGES, blog.coverImage);
+        coverImage = url;
+      }
+      const attachments = await Promise.all((blog.attachments || []).map(async a => ({
         ...a,
-        url: a.url.startsWith("http") ? a.url : supabaseAttachmentBase + a.url,
-      }));
+        url: a.url ? (await getSignedUrlForPublic(BUCKETS.BLOG_ATTACHMENTS, a.url)).url : null,
+      })));
       return NextResponse.json({
         blog: {
           ...blog,
@@ -41,15 +40,15 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
       },
     });
     if (submission) {
-      const coverImage = submission.coverImage
-        ? (submission.coverImage.startsWith("http")
-            ? submission.coverImage
-            : supabaseBlogImageBase + submission.coverImage)
-        : null;
-      const attachments = (submission.attachments || []).map(a => ({
+      let coverImage = null;
+      if (submission.coverImage) {
+        const { url } = await getSignedUrlForPublic(BUCKETS.BLOG_IMAGES, submission.coverImage);
+        coverImage = url;
+      }
+      const attachments = await Promise.all((submission.attachments || []).map(async a => ({
         ...a,
-        url: a.url.startsWith("http") ? a.url : supabaseAttachmentBase + a.url,
-      }));
+        url: a.url ? (await getSignedUrlForPublic(BUCKETS.BLOG_ATTACHMENTS, a.url)).url : null,
+      })));
       return NextResponse.json({
         blog: {
           ...submission,

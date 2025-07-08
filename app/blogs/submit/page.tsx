@@ -6,7 +6,6 @@ import ReactMarkdown from "react-markdown";
 import { z } from "zod";
 import { toast } from 'sonner';
 import { X } from 'lucide-react';
-import { uploadFile } from "@/app/lib/supabase/storage";
 import { useRouter } from "next/navigation";
 
 const BlogSchema = z.object({
@@ -127,25 +126,31 @@ export default function BlogSubmitPage() {
       // 2. Upload cover image if present
       let coverImageUrl = "";
       if (draft.coverImage) {
-        const { url, error } = await uploadFile(
-          draft.coverImage,
-          "blog-images",
-          "covers"
-        );
-        if (error) throw new Error("Failed to upload cover image");
-        coverImageUrl = url;
+        const formData = new FormData();
+        formData.append("file", draft.coverImage);
+        formData.append("type", "cover");
+        const res = await fetch("/api/blogs/upload", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+        if (!res.ok || !data.url) throw new Error("Failed to upload cover image");
+        coverImageUrl = data.url;
       }
 
       // 3. Upload attachments
       const attachmentUrls = [];
       for (const file of draft.attachments) {
-        const { url, error } = await uploadFile(
-          file,
-          "blog-attachments",
-          "files"
-        );
-        if (error) throw new Error(`Failed to upload attachment: ${file.name}`);
-        attachmentUrls.push(url);
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("type", "attachment");
+        const res = await fetch("/api/blogs/upload", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+        if (!res.ok || !data.url) throw new Error(`Failed to upload attachment: ${file.name}`);
+        attachmentUrls.push(data.url);
       }
 
       // 4. Submit to API
@@ -324,7 +329,9 @@ export default function BlogSubmitPage() {
           {/* Consent checkbox above submit button */}
           <div className="flex items-center gap-3 text-gray-300 mt-2 mb-2">
             <input type="checkbox" id="consent" checked={draft.consent} onChange={e => handleChange("consent", e.target.checked)} className="w-5 h-5 rounded border-2 border-accent bg-[#232b3a] focus:ring-2 focus:ring-accent transition-all duration-150 cursor-pointer" />
-            <label htmlFor="consent" className="select-none cursor-pointer text-base leading-tight">I affirm this is my work and grant Asvara permission to edit and publish.</label>
+            <label htmlFor="consent" className="select-none cursor-pointer text-base leading-tight">
+              I agree with <Link href="/policies/blog-terms" className="text-accent underline" target="_blank" rel="noopener noreferrer">Blogs Terms and Conditions</Link>.
+            </label>
           </div>
           {/* Bottom: Submit button */}
           <Button className="w-full mt-2" onClick={handleSubmit} disabled={submitting} variant="primary" size="lg" type="submit">Send for Review</Button>

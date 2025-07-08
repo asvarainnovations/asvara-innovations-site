@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
+import { getSignedUrlForPublic } from '@/lib/gcp/storage';
+import { BUCKETS } from '@/lib/gcp-config';
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/lib/auth";
+import { authOptions } from "@/lib/authOptions";
 import { z } from "zod";
 
 const BlogSubmissionSchema = z.object({
@@ -30,7 +32,21 @@ export async function GET(req: NextRequest) {
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json({ blogs: blogPosts });
+    // Add signed URLs for coverImage and attachments if present
+    const postsWithUrls = await Promise.all(blogPosts.map(async (post) => {
+      let coverImage = null;
+      if (post.coverImage) {
+        const { url } = await getSignedUrlForPublic(BUCKETS.BLOG_IMAGES, post.coverImage);
+        coverImage = url;
+      }
+      // If you have attachments, add similar logic here
+      return {
+        ...post,
+        coverImage,
+      };
+    }));
+
+    return NextResponse.json({ blogs: postsWithUrls });
   } catch (error) {
     console.error("Error fetching blog posts:", error);
     return NextResponse.json(
@@ -53,6 +69,12 @@ export async function POST(req: NextRequest) {
     // Validate the submission data
     const validatedData = BlogSubmissionSchema.parse(data);
 
+    // Helper function to extract file path from GCS URL
+    const extractGcsPath = (url: string, bucketName: string): string => {
+      const gcsUrl = `https://storage.googleapis.com/${bucketName}/`;
+      return url.startsWith(gcsUrl) ? url.replace(gcsUrl, '') : url;
+    };
+
     // Create the blog submission
     const submission = await prisma.blogSubmission.create({
       data: {
@@ -64,14 +86,14 @@ export async function POST(req: NextRequest) {
         content: validatedData.content,
         // Store only the path after the bucket for coverImage
         coverImage: validatedData.coverImageUrl
-          ? validatedData.coverImageUrl.replace(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/blog-images/`, '')
+          ? extractGcsPath(validatedData.coverImageUrl, BUCKETS.BLOG_IMAGES)
           : undefined,
         tags: validatedData.tags || [],
         consent: validatedData.consent,
         attachments: {
           create: validatedData.attachmentUrls?.map(url => ({
             // Store only the path after the bucket for attachments
-            url: url.replace(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/blog-attachments/`, ''),
+            url: extractGcsPath(url, BUCKETS.BLOG_ATTACHMENTS),
             type: 'file'
           })) || []
         }

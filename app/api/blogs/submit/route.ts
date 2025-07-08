@@ -14,12 +14,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Excerpt too long (max 200 chars)' }, { status: 400 });
     }
     // Store only the path after the bucket for coverImage
+    const extractGcsPath = (url: string, bucketName: string): string => {
+      if (!url) return '';
+      const gcsUrl = `https://storage.googleapis.com/${bucketName}/`;
+      return url.startsWith(gcsUrl) ? url.replace(gcsUrl, '') : url;
+    };
     const coverImage = data.coverImageUrl
-      ? data.coverImageUrl.replace(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/blog-images/`, '')
+      ? extractGcsPath(data.coverImageUrl, process.env.GCP_BLOG_IMAGES_BUCKET)
       : undefined;
     // Store only the path after the bucket for attachments
     const attachments = data.attachmentUrls?.map((url: string) => ({
-      url: url.replace(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/blog-attachments/`, ''),
+      url: extractGcsPath(url, process.env.GCP_BLOG_ATTACHMENTS_BUCKET),
       type: 'file',
     })) || [];
     const submission = await prisma.blogSubmission.create({
