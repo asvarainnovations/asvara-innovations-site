@@ -19,12 +19,16 @@ export async function POST(req: NextRequest) {
       const gcsUrl = `https://storage.googleapis.com/${bucketName}/`;
       return url.startsWith(gcsUrl) ? url.replace(gcsUrl, '') : url;
     };
+    const blogImagesBucket = process.env.GCP_BLOG_IMAGES_BUCKET;
+    const blogAttachmentsBucket = process.env.GCP_BLOG_ATTACHMENTS_BUCKET;
+    if (!blogImagesBucket) throw new Error("GCP_BLOG_IMAGES_BUCKET env variable is not set");
+    if (!blogAttachmentsBucket) throw new Error("GCP_BLOG_ATTACHMENTS_BUCKET env variable is not set");
     const coverImage = data.coverImageUrl
-      ? extractGcsPath(data.coverImageUrl, process.env.GCP_BLOG_IMAGES_BUCKET)
+      ? extractGcsPath(data.coverImageUrl, blogImagesBucket)
       : undefined;
     // Store only the path after the bucket for attachments
     const attachments = data.attachmentUrls?.map((url: string) => ({
-      url: extractGcsPath(url, process.env.GCP_BLOG_ATTACHMENTS_BUCKET),
+      url: extractGcsPath(url, blogAttachmentsBucket),
       type: 'file',
     })) || [];
     const submission = await prisma.blogSubmission.create({
