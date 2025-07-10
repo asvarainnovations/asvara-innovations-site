@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { authOptions } from '@/lib/authOptions';
 import NextAuth from 'next-auth';
 
