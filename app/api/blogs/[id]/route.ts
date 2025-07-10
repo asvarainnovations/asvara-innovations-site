@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import prismadb from '@/lib/prismadb';
 import { getSignedUrlForPublic } from '@/lib/gcp/storage';
