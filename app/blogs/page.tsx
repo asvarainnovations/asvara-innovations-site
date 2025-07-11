@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/app/components/Button";
+import axiosInstance from '@/lib/axios';
 
 export default function BlogsPage() {
   const [blogs, setBlogs] = useState<any[]>([]);
@@ -9,10 +10,9 @@ export default function BlogsPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/blogs?published=true")
-      .then((res) => res.json())
-      .then((data) => {
-        setBlogs(data.blogs || []);
+    axiosInstance.get("/api/blogs?published=true")
+      .then((res) => {
+        setBlogs(res.data.blogs || []);
         setLoading(false);
       })
       .catch((e) => {
@@ -46,9 +46,9 @@ export default function BlogsPage() {
                 href={`/blogs/${blog.id}`}
                 className="block bg-[#181c24] border border-accent/10 rounded-xl shadow-lg hover:shadow-xl transition p-6 group"
               >
-                {blog.coverImageUrl && (
+                {blog.coverImage && (
                   <img
-                    src={blog.coverImageUrl}
+                    src={blog.coverImage}
                     alt={blog.title}
                     className="w-full h-48 object-cover rounded-lg mb-4 border border-accent/20 group-hover:border-accent"
                   />

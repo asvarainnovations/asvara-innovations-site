@@ -1,7 +1,8 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from "next/server";
 import { uploadFile } from '@/lib/gcp/storage';
 import { BUCKETS } from '@/lib/gcp-config';
-
+ 
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
   const file = formData.get('file');

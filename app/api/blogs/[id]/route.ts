@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import prismadb from '@/lib/prismadb';
-import { getSignedUrlForPublic } from '@/lib/gcp/storage';
+import { getPublicUrl } from '@/lib/gcp/storage';
 import { BUCKETS } from '@/lib/gcp-config';
 
 export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
@@ -18,13 +18,12 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     if (blog) {
       let coverImage = null;
       if (blog.coverImage) {
-        const { url } = await getSignedUrlForPublic(BUCKETS.BLOG_IMAGES, blog.coverImage);
-        coverImage = url;
+        coverImage = getPublicUrl(BUCKETS.BLOG_IMAGES, blog.coverImage);
       }
-      const attachments = await Promise.all((blog.attachments || []).map(async a => ({
+      const attachments = (blog.attachments || []).map(a => ({
         ...a,
-        url: a.url ? (await getSignedUrlForPublic(BUCKETS.BLOG_ATTACHMENTS, a.url)).url : null,
-      })));
+        url: a.url ? getPublicUrl(BUCKETS.BLOG_ATTACHMENTS, a.url) : null,
+      }));
       return NextResponse.json({
         blog: {
           ...blog,
@@ -43,13 +42,12 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     if (submission) {
       let coverImage = null;
       if (submission.coverImage) {
-        const { url } = await getSignedUrlForPublic(BUCKETS.BLOG_IMAGES, submission.coverImage);
-        coverImage = url;
+        coverImage = getPublicUrl(BUCKETS.BLOG_IMAGES, submission.coverImage);
       }
-      const attachments = await Promise.all((submission.attachments || []).map(async a => ({
+      const attachments = (submission.attachments || []).map(a => ({
         ...a,
-        url: a.url ? (await getSignedUrlForPublic(BUCKETS.BLOG_ATTACHMENTS, a.url)).url : null,
-      })));
+        url: a.url ? getPublicUrl(BUCKETS.BLOG_ATTACHMENTS, a.url) : null,
+      }));
       return NextResponse.json({
         blog: {
           ...submission,

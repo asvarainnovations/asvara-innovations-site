@@ -35,7 +35,6 @@ export async function uploadFile(
       metadata: {
         contentType: file instanceof File ? file.type : 'application/octet-stream',
       },
-      public: true, // Make file publicly accessible
     });
     
     // Get public URL
@@ -44,9 +43,24 @@ export async function uploadFile(
     return { url: publicUrl };
   } catch (error) {
     console.error('GCP upload error:', error);
+    
+    // Provide more detailed error information
+    let errorMessage = 'Upload failed';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (typeof error === 'object' && error !== null) {
+      // Handle Google Cloud API errors
+      const apiError = error as any;
+      if (apiError.response?.data) {
+        errorMessage = `GCP API Error: ${JSON.stringify(apiError.response.data)}`;
+      } else if (apiError.message) {
+        errorMessage = apiError.message;
+      }
+    }
+    
     return { 
       url: '', 
-      error: error instanceof Error ? error.message : 'Upload failed' 
+      error: errorMessage
     };
   }
 }
@@ -104,6 +118,13 @@ export async function getSignedUrl(
       error: error instanceof Error ? error.message : 'Failed to generate signed URL' 
     };
   }
+}
+
+/**
+ * Get public URL for a file in a public bucket
+ */
+export function getPublicUrl(bucketName: BucketName, filePath: string): string {
+  return `https://storage.googleapis.com/${bucketName}/${filePath}`;
 }
 
 /**

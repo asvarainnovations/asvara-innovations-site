@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
-import { deleteFile, getSignedUrlForPublic } from '@/lib/gcp/storage';
+import { deleteFile, getPublicUrl } from '@/lib/gcp/storage';
 import { BUCKETS } from '@/lib/gcp-config';
 
 export async function GET(req: Request) {
@@ -16,17 +16,16 @@ export async function GET(req: Request) {
       });
       if (!submission) return NextResponse.json({ error: "Not found" }, { status: 404 });
       
-      // Generate signed URL for coverImage
+      // Generate public URL for coverImage
       let coverImage = null;
       if (submission.coverImage) {
-        const { url } = await getSignedUrlForPublic(BUCKETS.BLOG_IMAGES, submission.coverImage);
-        coverImage = url;
+        coverImage = getPublicUrl(BUCKETS.BLOG_IMAGES, submission.coverImage);
       }
-      // Generate signed URLs for attachments
-      const attachments = await Promise.all((submission.attachments || []).map(async a => ({
+      // Generate public URLs for attachments
+      const attachments = (submission.attachments || []).map(a => ({
         ...a,
-        url: a.url ? (await getSignedUrlForPublic(BUCKETS.BLOG_ATTACHMENTS, a.url)).url : null,
-      })));
+        url: a.url ? getPublicUrl(BUCKETS.BLOG_ATTACHMENTS, a.url) : null,
+      }));
       return NextResponse.json({
         submission: {
           ...submission,
@@ -39,23 +38,22 @@ export async function GET(req: Request) {
       orderBy: { createdAt: "desc" },
       include: { attachments: true },
     });
-    // Add signed URLs for all submissions
-    const submissionsWithUrls = await Promise.all(submissions.map(async (submission) => {
+    // Add public URLs for all submissions
+    const submissionsWithUrls = submissions.map((submission) => {
       let coverImage = null;
       if (submission.coverImage) {
-        const { url } = await getSignedUrlForPublic(BUCKETS.BLOG_IMAGES, submission.coverImage);
-        coverImage = url;
+        coverImage = getPublicUrl(BUCKETS.BLOG_IMAGES, submission.coverImage);
       }
-      const attachments = await Promise.all((submission.attachments || []).map(async a => ({
+      const attachments = (submission.attachments || []).map(a => ({
         ...a,
-        url: a.url ? (await getSignedUrlForPublic(BUCKETS.BLOG_ATTACHMENTS, a.url)).url : null,
-      })));
+        url: a.url ? getPublicUrl(BUCKETS.BLOG_ATTACHMENTS, a.url) : null,
+      }));
       return {
         ...submission,
         coverImage,
         attachments,
       };
-    }));
+    });
     return NextResponse.json({ submissions: submissionsWithUrls });
   } catch (error) {
     console.error("Error fetching blog submissions:", error);
@@ -79,7 +77,7 @@ export async function DELETE(req: Request) {
     // Helper to extract file path from GCS URL
     const getPathFromUrl = (url: string, bucketName: string) => {
       try {
-        const gcsUrl = `https://storage.googleapis.com/${bucketName}/`;
+        const gcsUrl = `https://storage.googleapis.com/${bucketName}/covers`;
         if (url.startsWith(gcsUrl)) {
           return url.replace(gcsUrl, '');
         }

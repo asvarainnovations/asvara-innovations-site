@@ -3,6 +3,8 @@ import { Storage } from '@google-cloud/storage';
 // Google Cloud Storage configuration
 export const storage = new Storage({
   projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
+  // Use keyFilename if provided, otherwise use Application Default Credentials
+  ...(process.env.GOOGLE_CLOUD_KEY_FILE && { keyFilename: process.env.GOOGLE_CLOUD_KEY_FILE }),
 });
 
 // Storage buckets configuration

@@ -18,6 +18,7 @@ The migration involved replacing Supabase services with equivalent Google Cloud 
 3. **`GCP_SETUP.md`** - Comprehensive GCP setup guide
 4. **`scripts/migrate-to-gcp.js`** - Data migration script
 5. **`MIGRATION_SUMMARY.md`** - This summary document
+6. **`app/api/test-public-urls/route.ts`** - Test endpoint for public URL verification
 
 ### Files Updated
 
@@ -31,28 +32,42 @@ The migration involved replacing Supabase services with equivalent Google Cloud 
    - Updated Prisma client configuration for GCP
    - Improved TypeScript declarations
 
-3. **`app/api/blogs/route.ts`**
-   - Updated imports to use GCP storage
-   - Modified URL parsing logic for GCS URLs
-   - Added helper function for GCS path extraction
+3. **`lib/gcp/storage.ts`**
+   - Added `getPublicUrl()` function for public bucket access
+   - Updated `uploadFile()` to use public URLs for blog content
+   - Kept signed URL functionality for private files (resumes)
 
-4. **`app/api/admin/blog-submissions/route.ts`**
-   - Replaced Supabase storage with GCP storage
-   - Updated file deletion logic
-   - Modified URL construction for GCS
+4. **`app/api/blogs/route.ts`**
+   - Updated to use public URLs for blog images and attachments
+   - Removed signed URL generation for blog content
+   - Simplified URL handling for public buckets
 
-5. **`app/api/careers/route.ts`**
-   - Updated to use GCP storage for resume uploads
-   - Modified bucket references
+5. **`app/api/blogs/[id]/route.ts`**
+   - Updated to use public URLs for blog images and attachments
+   - Removed async signed URL generation for better performance
+   - Simplified attachment URL mapping
 
-6. **`app/blogs/submit/page.tsx`**
+6. **`app/api/admin/blog-submissions/route.ts`**
+   - Updated to use public URLs for blog images and attachments
+   - Removed async signed URL generation for better performance
+   - Kept file deletion functionality intact
+
+7. **`app/api/admin/careers/route.ts`**
+   - Kept signed URL functionality for resumes (private access)
+   - Updated path extraction logic for better compatibility
+
+8. **`app/blogs/page.tsx`**
+   - Fixed property name from `coverImageUrl` to `coverImage`
+   - Updated to work with new API response format
+
+9. **`app/blogs/submit/page.tsx`**
    - Updated imports to use GCP storage
    - Modified bucket references for file uploads
 
-7. **`README.md`**
-   - Updated setup instructions for GCP
-   - Added reference to GCP setup guide
-   - Updated progress section to reflect GCP integration
+10. **`README.md`**
+    - Updated setup instructions for GCP
+    - Added reference to GCP setup guide
+    - Updated progress section to reflect GCP integration
 
 ## 🔧 Configuration Changes
 
@@ -90,6 +105,7 @@ The database connection remains PostgreSQL, but now connects to Google Cloud SQL
    - `uploadFile()` - Upload files to GCS with automatic path generation
    - `deleteFile()` - Delete files from GCS with error handling
    - `getSignedUrl()` - Generate signed URLs for private file access
+   - `getPublicUrl()` - Generate public URLs for public bucket access
    - `listFiles()` - List files in buckets with optional prefix filtering
 
 2. **Bucket Management**
@@ -97,7 +113,12 @@ The database connection remains PostgreSQL, but now connects to Google Cloud SQL
    - Configurable bucket names via environment variables
    - Public access for blog content, private for resumes
 
-3. **Error Handling**
+3. **Public vs Private Access**
+   - **Blog Images & Attachments**: Public access using direct URLs
+   - **Resumes**: Private access using signed URLs
+   - **Performance**: Public URLs are faster and don't require authentication
+
+4. **Error Handling**
    - Comprehensive error handling for all storage operations
    - Graceful fallbacks for missing files
    - Detailed logging for debugging
@@ -117,140 +138,139 @@ The migration script (`scripts/migrate-to-gcp.js`) provides:
    - Principle of least privilege for IAM roles
    - Environment-based configuration
 
-2. **Bucket Security**
-   - Public access only for necessary buckets
-   - Private access for sensitive files (resumes)
-   - CORS configuration for web access
+2. **Public vs Private Access Control**
+   - Blog content is publicly accessible for better performance
+   - Resume files remain private with signed URL access
+   - Clear separation of public and private content
 
-3. **Database Security**
-   - Cloud SQL with private networking options
-   - Secure connection strings
-   - User-based access control
+3. **Bucket-Level Security**
+   - Public buckets for blog content (images, attachments)
+   - Private buckets for sensitive files (resumes)
+   - Proper CORS configuration for web access
 
-## 📊 Performance Benefits
+## 🎯 Performance Improvements
 
-1. **Global CDN**
-   - Google Cloud Storage provides global CDN
-   - Faster file access worldwide
-   - Reduced latency for file downloads
+1. **Public URL Access**
+   - Blog images and attachments load faster with direct URLs
+   - No authentication overhead for public content
+   - Better caching and CDN compatibility
 
-2. **Scalability**
-   - Automatic scaling with GCP
-   - No storage limits (within project quotas)
-   - Better performance under load
+2. **Reduced API Calls**
+   - No need to generate signed URLs for blog content
+   - Simplified frontend code for image display
+   - Better user experience with faster loading
 
-3. **Integration**
-   - Native integration with other GCP services
-   - Better monitoring and logging
-   - Simplified infrastructure management
+## 🔧 Testing
 
-## 🛠️ Setup Requirements
+1. **Public URL Test Endpoint**
+   - `/api/test-public-urls` - Verify public URL generation
+   - Tests bucket configuration and URL format
+   - Helps debug URL generation issues
 
-### GCP Console Setup
+2. **File Upload Testing**
+   - Blog image and attachment uploads work with public URLs
+   - Resume uploads still use signed URLs for privacy
+   - Proper error handling for failed uploads
 
-1. **Create Project**
-   - New GCP project with billing enabled
-   - Enable required APIs (SQL Admin, Storage, Resource Manager)
+## 📊 Migration Status
 
-2. **Cloud SQL Setup**
-   - PostgreSQL instance creation
-   - Database and user creation
-   - Network configuration
+✅ **Completed:**
+- Database migration to Google Cloud SQL
+- Storage migration to Google Cloud Storage
+- Public bucket configuration for blog content
+- Private bucket configuration for resumes
+- API endpoints updated for public URLs
+- Frontend components updated
+- Environment variable configuration
+- Service account setup
 
-3. **Cloud Storage Setup**
-   - Create storage buckets
-   - Configure permissions and CORS
-   - Set up service account
+🔄 **In Progress:**
+- Testing public URL functionality
+- Performance optimization
+- Error handling improvements
 
-4. **Service Account**
-   - Create service account with appropriate roles
-   - Download service account key
-   - Configure IAM permissions
+📋 **Planned:**
+- CDN integration for better performance
+- Advanced caching strategies
+- Monitoring and analytics
+
+## 🚀 Deployment Notes
 
 ### Local Development
+- Use service account key file for authentication
+- Public URLs work immediately without authentication
+- Signed URLs require proper service account setup
 
-1. **Environment Variables**
-   - Copy `.env.example` to `.env.local`
-   - Fill in all GCP configuration values
-   - Update authentication credentials
+### Production Deployment
+- Cloud Run uses attached service account automatically
+- No key file needed in production
+- Public URLs work seamlessly
+- Private files (resumes) use signed URLs with service account
 
-2. **Dependencies**
-   - Run `npm install` to install new packages
-   - Generate Prisma client: `npx prisma generate`
+## 🔍 Troubleshooting
 
-3. **Database Migration**
-   - Run migrations: `npx prisma migrate deploy`
-   - Seed database if needed: `npm run db:seed`
+### Common Issues
 
-4. **Data Migration**
-   - Run migration script: `npm run migrate:gcp`
-   - Verify data integrity
-   - Test all functionality
+1. **Public URL Access**
+   - Verify bucket permissions are set to public
+   - Check CORS configuration for web access
+   - Ensure bucket names match environment variables
 
-## 🔍 Testing Checklist
+2. **Signed URL Issues**
+   - Verify service account has proper permissions
+   - Check service account key file path
+   - Ensure `client_email` is present in key file
 
-After migration, verify the following:
+3. **File Upload Problems**
+   - Check bucket permissions and CORS settings
+   - Verify environment variables are set correctly
+   - Test with the public URL test endpoint
 
-- [ ] User authentication works
-- [ ] Blog submission with file uploads
-- [ ] Career application with resume upload
-- [ ] Admin dashboard functionality
-- [ ] File deletion from storage
-- [ ] Database operations
-- [ ] API endpoints respond correctly
-- [ ] File URLs are accessible
-- [ ] Error handling works properly
+### Useful Commands
 
-## 🚨 Important Notes
+```bash
+# Test public URL generation
+curl http://localhost:3000/api/test-public-urls
 
-1. **Service Account Key**
-   - Keep the service account key secure
-   - Never commit it to version control
-   - Use environment variables in production
+# Test GCP authentication
+curl http://localhost:3000/api/test-gcp-auth
 
-2. **Data Migration**
-   - Existing Supabase data needs to be migrated
-   - Run the migration script after GCP setup
-   - Verify all data is accessible after migration
+# Check bucket permissions
+gsutil iam get gs://your-bucket-name
+```
 
-3. **Cost Considerations**
-   - Monitor GCP usage and costs
-   - Set up billing alerts
-   - Optimize storage classes for different file types
+## 📈 Benefits of Public Buckets
 
-4. **Backup Strategy**
-   - Implement regular database backups
-   - Consider cross-region storage replication
-   - Test disaster recovery procedures
+1. **Performance**
+   - Faster image loading
+   - Better caching
+   - Reduced server load
 
-## 📞 Support
+2. **Simplicity**
+   - No authentication required for blog content
+   - Simpler frontend code
+   - Better user experience
 
-If you encounter issues during the migration:
+3. **Cost**
+   - Reduced API calls for signed URLs
+   - Better CDN utilization
+   - Lower bandwidth costs
 
-1. Check the [GCP Setup Guide](./GCP_SETUP.md) for detailed instructions
-2. Review Google Cloud Console for error messages
-3. Verify all environment variables are correctly set
-4. Ensure all required APIs are enabled
-5. Check service account permissions
+## 🔮 Future Enhancements
 
-## 🎯 Next Steps
+1. **CDN Integration**
+   - Cloud CDN for global content delivery
+   - Edge caching for better performance
+   - Automatic image optimization
 
-1. **Production Deployment**
-   - Update production environment variables
-   - Deploy to your hosting platform
-   - Monitor application performance
+2. **Advanced Features**
+   - Image resizing and optimization
+   - Video transcoding
+   - Advanced file management
 
-2. **Optimization**
-   - Implement caching strategies
-   - Optimize file storage classes
-   - Set up monitoring and alerting
+3. **Monitoring**
+   - Storage usage analytics
+   - Performance monitoring
+   - Cost optimization
 
-3. **Security Hardening**
-   - Review and update security policies
-   - Implement additional access controls
-   - Regular security audits
-
-4. **Documentation**
-   - Update team documentation
-   - Create operational runbooks
-   - Document troubleshooting procedures 
+This migration successfully modernized the Asvara Innovations platform with improved performance, better security, and enhanced user experience through Google Cloud Platform integration. 

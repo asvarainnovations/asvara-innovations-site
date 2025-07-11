@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import axiosInstance from '@/lib/axios';
 
 export default function Register() {
   const router = useRouter();
@@ -27,20 +28,14 @@ export default function Register() {
     }
 
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          fullName: formData.fullName,
-        }),
+      const response = await axiosInstance.post("/api/auth/register", {
+        email: formData.email,
+        password: formData.password,
+        fullName: formData.fullName,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Registration failed");
+      if (!response.status || response.status >= 400) {
+        throw new Error(response.data.error || "Registration failed");
       }
 
       // Redirect to login page after successful registration

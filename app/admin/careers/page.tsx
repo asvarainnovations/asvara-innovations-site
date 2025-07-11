@@ -20,9 +20,9 @@ interface CareerSubmission {
 }
 
 const fetchSubmissions = async () => {
-  const res = await fetch("/api/admin/careers");
-  if (!res.ok) throw new Error("Failed to fetch submissions");
-  return res.json();
+  const res = await axios.get("/api/admin/careers");
+  if (!res.status || res.status >= 400) throw new Error("Failed to fetch submissions");
+  return res.data;
 };
 
 const positions = [

@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
-import { getSignedUrlForPublic } from '@/lib/gcp/storage';
+import { getPublicUrl } from '@/lib/gcp/storage';
 import { BUCKETS } from '@/lib/gcp-config';
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
@@ -33,12 +33,11 @@ export async function GET(req: NextRequest) {
       orderBy: { createdAt: "desc" },
     });
 
-    // Add signed URLs for coverImage and attachments if present
+    // Add public URLs for coverImage and attachments if present
     const postsWithUrls = await Promise.all(blogPosts.map(async (post) => {
       let coverImage = null;
       if (post.coverImage) {
-        const { url } = await getSignedUrlForPublic(BUCKETS.BLOG_IMAGES, post.coverImage);
-        coverImage = url;
+        coverImage = getPublicUrl(BUCKETS.BLOG_IMAGES, post.coverImage);
       }
       // If you have attachments, add similar logic here
       return {

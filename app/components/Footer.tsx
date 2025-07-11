@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInstagram, faXTwitter } from "@fortawesome/free-brands-svg-icons";
 
 export default function Footer() {
   const footerSections = {
@@ -54,15 +56,30 @@ export default function Footer() {
               </span>
             </Link>
             <p className="mt-4 text-gray-400 text-sm">
-              Revolutionizing legal tech with cutting-edge AI solutions for legal professionals, law firms, and enterprises worldwide.
+              Revolutionizing legal tech with cutting-edge AI solutions for
+              legal professionals, law firms, and enterprises worldwide.
             </p>
-            
+
             {/* Social Links */}
             <div className="flex space-x-4 mt-6">
-              <Link href="https://instagram.com/asvara.ai" className="text-gray-400 hover:text-accent transition-colors">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path fillRule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clipRule="evenodd" />
-                </svg>
+              <Link
+                href="https://instagram.com/asvara.ai"
+                className="text-gray-400 hover:text-accent transition-colors"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FontAwesomeIcon icon={faInstagram} className="w-5 h-5" />
+              </Link>
+              <Link
+                href="https://x.com/AsvaraInno"
+                className="text-gray-400 hover:text-accent transition-colors"
+                aria-label="Twitter/X"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {/* Font Awesome X (Twitter) icon */}
+                <FontAwesomeIcon icon={faXTwitter} className="w-5 h-5" />
+                {/* <svg className="w-5 h-5" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="x-twitter" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M461.1 2.7c-7.6-3.2-16.3-1.4-22.1 4.4L256 190.1 73.1 7.1C67.3 1.3 58.6-.5 51 2.7S39.6 14.1 42.8 21.7L225.7 304.6 42.8 486.5c-7.6 7.6-9.4 19.3-4.4 28.1c5 8.8 15.7 12.6 24.5 7.6L256 321.9l183 183c8.8 5 19.5 1.2 24.5-7.6c5-8.8 3.2-20.5-4.4-28.1L286.3 304.6 469.2 21.7c3.2-7.6 1.4-16.3-4.4-22.1z"></path></svg> */}
               </Link>
               {/* <Link href="https://twitter.com" className="text-gray-400 hover:text-accent transition-colors">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -84,8 +101,8 @@ export default function Footer() {
               <ul className="space-y-3">
                 {section.links.map((link) => (
                   <li key={link.name}>
-                    <Link 
-                      href={link.href} 
+                    <Link
+                      href={link.href}
                       className="text-gray-400 hover:text-accent transition-colors text-sm"
                     >
                       {link.name}
@@ -101,13 +118,20 @@ export default function Footer() {
         <div className="pt-8 mt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} Asvara Innovations. All rights reserved.
+              © {new Date().getFullYear()} Asvara Innovations. All rights
+              reserved.
             </p>
             <div className="flex space-x-6">
-              <Link href="/policies/privacy" className="text-gray-400 hover:text-accent text-sm transition-colors">
+              <Link
+                href="/policies/privacy"
+                className="text-gray-400 hover:text-accent text-sm transition-colors"
+              >
                 Privacy Policy
               </Link>
-              <Link href="/policies/terms" className="text-gray-400 hover:text-accent text-sm transition-colors">
+              <Link
+                href="/policies/terms"
+                className="text-gray-400 hover:text-accent text-sm transition-colors"
+              >
                 Terms of Service
               </Link>
             </div>
@@ -116,4 +140,4 @@ export default function Footer() {
       </div>
     </footer>
   );
-} 
+}

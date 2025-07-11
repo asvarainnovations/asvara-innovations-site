@@ -30,16 +30,16 @@ export default function SubscriptionPage() {
 
   const fetchPlans = async () => {
     // For demo, fetch all plans for the first service
-    const res = await fetch("/api/plans");
-    if (res.ok) {
-      setPlans(await res.json());
+    const res = await axiosInstance.get("/api/plans");
+    if (res.status === 200) {
+      setPlans(res.data);
     }
   };
 
   const fetchCurrent = async () => {
-    const res = await fetch("/api/subscription");
-    if (res.ok) {
-      setCurrent(await res.json());
+    const res = await axiosInstance.get("/api/subscription");
+    if (res.status === 200) {
+      setCurrent(res.data);
     }
   };
 

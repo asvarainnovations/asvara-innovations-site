@@ -7,6 +7,7 @@ import { z } from "zod";
 import { toast } from 'sonner';
 import { X } from 'lucide-react';
 import { useRouter } from "next/navigation";
+import axios from '@/lib/axios';
 
 const BlogSchema = z.object({
   authorName: z.string().min(1, "Full name is required"),
@@ -129,12 +130,11 @@ export default function BlogSubmitPage() {
         const formData = new FormData();
         formData.append("file", draft.coverImage);
         formData.append("type", "cover");
-        const res = await fetch("/api/blogs/upload", {
-          method: "POST",
-          body: formData,
+        const res = await axios.post("/api/blogs/upload", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
         });
-        const data = await res.json();
-        if (!res.ok || !data.url) throw new Error("Failed to upload cover image");
+        const data = res.data;
+        if (!res.status || res.status >= 400 || !data.url) throw new Error("Failed to upload cover image");
         coverImageUrl = data.url;
       }
 
@@ -144,29 +144,24 @@ export default function BlogSubmitPage() {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("type", "attachment");
-        const res = await fetch("/api/blogs/upload", {
-          method: "POST",
-          body: formData,
+        const res = await axios.post("/api/blogs/upload", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
         });
-        const data = await res.json();
-        if (!res.ok || !data.url) throw new Error(`Failed to upload attachment: ${file.name}`);
+        const data = res.data;
+        if (!res.status || res.status >= 400 || !data.url) throw new Error(`Failed to upload attachment: ${file.name}`);
         attachmentUrls.push(data.url);
       }
 
       // 4. Submit to API
-      const response = await fetch("/api/blogs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...draft,
-          tags,
-          coverImageUrl,
-          attachmentUrls,
-        }),
+      const response = await axios.post("/api/blogs/submit", {
+        ...draft,
+        tags,
+        coverImageUrl,
+        attachmentUrls,
       });
 
-      if (!response.ok) {
-        const error = await response.json();
+      if (!response.status || response.status >= 400) {
+        const error = response.data;
         throw new Error(error.message || "Failed to submit blog post");
       }
 
