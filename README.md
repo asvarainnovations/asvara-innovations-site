@@ -135,14 +135,17 @@ If both scripts complete successfully, your database connection and seeding are 
 - **API & Subscriptions**: API key management and subscription creation/listing.
 - **Database**: Full integration with Prisma ORM and Google Cloud SQL, including migrations and seeding.
 - **Storage**: Google Cloud Storage integration for file uploads and management.
+    - Blog images and attachments use public GCP buckets and direct public URLs.
+    - Resumes are stored privately with signed URL access only.
+    - File deletion logic for blogs and careers is implemented (removes files from GCP on delete).
+- **Environment Variables**: Secure handling for local and production, with Cloud Run using built-in service account and `.env.production` for build-time config.
+- **Docker & Cloud Run**: Production-ready Dockerfile, build, push, and deploy flow to Cloud Run.
 - **Blog System**:
   - Complete blog submission flow with cover image and file attachments.
-  - Integration with Google Cloud Storage for file uploads.
   - Admin moderation dashboard to review, approve, and reject submissions.
   - Backend APIs for blog management with authentication checks.
 - **Careers System**:
   - Universal careers application form with inline validation and file upload.
-  - Resumes are uploaded and stored in Google Cloud Storage.
   - All submissions are viewable in a modern admin dashboard at `/admin/careers` with search, filter, and download links for resumes.
 - **Frontend & UI/UX**:
   - Complete redesign of the homepage for a modern, animated feel.
@@ -150,9 +153,12 @@ If both scripts complete successfully, your database connection and seeding are 
   - Refactored "Innovations" section with dedicated pages for each product.
   - Polished "Problem/Solution" section.
   - Added "About Us" page.
+  - Footer updated with Font Awesome icons and correct social links.
+- **Troubleshooting & Security**:
+  - Cloud SQL authorized networks and GCP permissions configured.
+  - Prisma/OpenSSL and GCP key file logic fixed for production.
 
 ### 🚧 TODO / In Progress
-- **Storage**: Implement file cleanup for deleted blog posts in Google Cloud Storage.
 - **/api/auth/login**: Issue JWT or session token after successful login (currently only returns user info).
 - **/api/subscribe**: Integrate with payment/subscription backend (currently just logs request).
 - **/api/log-innovation-click**: Save click events to database or analytics service (currently just logs to console).

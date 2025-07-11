@@ -154,10 +154,10 @@ export default function BlogSubmitPage() {
 
       // 4. Submit to API
       const response = await axios.post("/api/blogs/submit", {
-        ...draft,
-        tags,
-        coverImageUrl,
-        attachmentUrls,
+          ...draft,
+          tags,
+          coverImageUrl,
+          attachmentUrls,
       });
 
       if (!response.status || response.status >= 400) {

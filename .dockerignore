@@ -6,8 +6,7 @@ docker-compose.yml
 Dockerfile
 npm-debug.log
 yarn-error.log
-.env.local
-.env.development
-.env.test
+.env*
+!.env.production
 coverage
 *.md 
