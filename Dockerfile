@@ -1,5 +1,5 @@
 # Install dependencies only when needed
-FROM node:20-alpine AS deps
+FROM node:20-slim AS deps
 WORKDIR /app
 COPY package.json package-lock.json* pnpm-lock.yaml* yarn.lock* ./
 RUN \
@@ -8,22 +8,22 @@ RUN \
   else npm ci; fi
 
 # Rebuild the source code only when needed
-FROM node:20-alpine AS builder
+FROM node:20-slim AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# Generate Prisma client
+# Generate Prisma client (for debian-openssl-1.1.x)
 RUN npx prisma generate
 # Build Next.js app
 RUN npm run build
 
 # Production image, copy all files and run next
-FROM node:20-alpine AS runner
+FROM node:20-slim AS runner
 WORKDIR /app
 ENV NODE_ENV production
 
 # Add a non-root user to run the app
-RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
+RUN addgroup --gid 1001 nodejs && adduser --uid 1001 --gid 1001 --disabled-password nextjs
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
