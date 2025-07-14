@@ -29,9 +29,9 @@ export default function Register() {
 
     try {
       const response = await axiosInstance.post("/api/auth/register", {
-        email: formData.email,
-        password: formData.password,
-        fullName: formData.fullName,
+          email: formData.email,
+          password: formData.password,
+          fullName: formData.fullName,
       });
 
       if (!response.status || response.status >= 400) {

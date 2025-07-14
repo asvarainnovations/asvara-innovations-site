@@ -59,7 +59,7 @@ export default function Footer() {
               Revolutionizing legal tech with cutting-edge AI solutions for
               legal professionals, law firms, and enterprises worldwide.
             </p>
-
+            
             {/* Social Links */}
             <div className="flex space-x-4 mt-6">
               <Link
@@ -101,8 +101,8 @@ export default function Footer() {
               <ul className="space-y-3">
                 {section.links.map((link) => (
                   <li key={link.name}>
-                    <Link
-                      href={link.href}
+                    <Link 
+                      href={link.href} 
                       className="text-gray-400 hover:text-accent transition-colors text-sm"
                     >
                       {link.name}
@@ -140,4 +140,4 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+} 
