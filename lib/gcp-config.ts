@@ -1,8 +1,6 @@
 import { Storage } from '@google-cloud/storage';
 
-const isLocal =
-  process.env.NODE_ENV !== 'production' &&
-  !!process.env.GOOGLE_CLOUD_KEY_FILE;
+const isLocal = process.env.NODE_ENV === 'development';
 
 export const storage = new Storage({
   projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
