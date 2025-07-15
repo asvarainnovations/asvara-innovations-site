@@ -1,0 +1,19 @@
+# Ignore everything by default
+**
+# But NOT these:
+!package.json
+!package-lock.json
+!Dockerfile
+!cloudbuild.yaml
+!prisma/
+!prisma/**
+!app/
+!app/**
+!lib/
+!lib/**
+!public/
+!public/**
+!next.config.js
+!tsconfig.json
+!tailwind.config.ts
+!README.md

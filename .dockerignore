@@ -10,3 +10,5 @@ yarn-error.log
 !.env.production
 coverage
 *.md 
+!prisma/
+!prisma/schema.prisma 
