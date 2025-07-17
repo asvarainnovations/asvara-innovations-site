@@ -3,6 +3,7 @@ FROM node:22 AS deps
 WORKDIR /app
 COPY package.json package-lock.json* pnpm-lock.yaml* yarn.lock* ./
 COPY prisma ./prisma
+ENV NODE_ENV=development
 RUN npm ci --unsafe-perm --jobs=1
 
 # Rebuild the source code only when needed
