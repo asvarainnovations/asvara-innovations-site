@@ -1,11 +1,9 @@
-/** @type {import('next').NextConfig} */
 const path = require('path');
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 1) Tell Next.js to emit a "standalone" build (all required .next files + node_modules)
   output: 'standalone',
-
-  // 2) Your existing image settings
+  reactStrictMode: true,
   images: {
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
@@ -15,7 +13,6 @@ const nextConfig = {
     ],
   },
 
-  // 3) Your existing webpack alias
   webpack: (config) => {
     config.resolve.alias['@'] = path.resolve(__dirname);
     return config;
