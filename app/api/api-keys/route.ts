@@ -15,18 +15,25 @@ interface SessionWithUser extends Session {
   };
 }
 
+type UserWithId = {
+  id: string;
+  email?: string | null;
+  name?: string | null;
+  image?: string | null;
+};
+
 // GET /api/api-keys - Get all API keys for the current user
 export async function GET(request: Request) {
   try {
-    const session = await getServerSession(authOptions) as SessionWithUser;
-
-    if (!session?.user?.id) {
+    const session = await getServerSession(authOptions);
+    const user = session?.user as UserWithId | undefined;
+    if (!user?.id) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const apiKeys = await prisma.apiKey.findMany({
       where: {
-        userId: session.user.id,
+        userId: user.id,
       },
       select: {
         id: true,
@@ -50,9 +57,9 @@ export async function GET(request: Request) {
 // POST /api/api-keys - Create a new API key
 export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions) as SessionWithUser;
-
-    if (!session?.user?.id) {
+    const session = await getServerSession(authOptions);
+    const user = session?.user as UserWithId | undefined;
+    if (!user?.id) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -70,7 +77,7 @@ export async function POST(request: Request) {
       data: {
         name,
         token,
-        userId: session.user.id,
+        userId: user.id,
         serviceId: "default", // You might want to make this configurable
       },
       select: {

@@ -1,5 +1,5 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/utopian-pride-462088-j4/asvara-innovations-site:latest', '.']
+    args: ['build', '-t', 'asia-south1-docker.pkg.dev/utopian-pride-462008-j4/cloud-run-source-deploy/asvara-innovations-site:latest', '.']
 images:
-  - 'gcr.io/utopian-pride-462088-j4/asvara-innovations-site:latest' 
+  - 'asia-south1-docker.pkg.dev/utopian-pride-462008-j4/cloud-run-source-deploy/asvara-innovations-site:latest' 

@@ -17,3 +17,8 @@
 !tsconfig.json
 !tailwind.config.ts
 !README.md
+!components/
+!components/**
+!.env.production
+!.next
+!.next/static

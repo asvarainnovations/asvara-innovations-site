@@ -4,35 +4,47 @@ import Image from 'next/image';
 import { useSession, signOut } from "next-auth/react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FiLogOut } from "react-icons/fi";
+import { useState } from 'react';
 
 export default function DesktopNavbar() {
   const { data: session } = useSession();
 
-  const AvatarDropdown = () => (
-    <div className="relative group">
-      <button className="flex items-center space-x-2 focus:outline-none">
-        <img
-          src={session?.user?.image || "/avatar-placeholder.png"}
-          alt={session?.user?.name || "User"}
-          className="w-8 h-8 rounded-full border-2 border-accent"
-        />
-        <span className="text-white font-medium hidden md:inline">{session?.user?.name?.split(" ")[0] || "User"}</span>
-      </button>
-      <div className="absolute right-0 mt-2 w-max bg-gray-800 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 border border-gray-700">
-        <Link href="/dashboard" className="flex items-center gap-2 px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-t-md">
-          <IoSettingsOutline className="w-5 h-5" />
-          Account Settings
-        </Link>
-        <button
-          onClick={() => signOut()}
-          className="w-full flex items-center gap-2 text-left px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-b-md"
-        >
-          <FiLogOut className="w-5 h-5" />
-          Logout
+  const AvatarDropdown = () => {
+    const [imgError, setImgError] = useState(false);
+    const initial = session?.user?.name?.[0]?.toUpperCase() || 'U';
+    return (
+      <div className="relative group">
+        <button className="flex items-center space-x-2 focus:outline-none">
+          {!imgError && session?.user?.image ? (
+            <img
+              src={session.user.image}
+              alt={session.user.name || "User"}
+              className="w-8 h-8 rounded-full border-2 border-accent"
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <span className="w-8 h-8 rounded-full border-2 border-accent bg-accent flex items-center justify-center text-white font-bold text-lg">
+              {initial}
+            </span>
+          )}
+          <span className="text-white font-medium hidden md:inline">{session?.user?.name?.split(" ")[0] || "User"}</span>
         </button>
+        <div className="absolute right-0 mt-2 w-max bg-gray-800 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 border border-gray-700">
+          <Link href="/dashboard" className="flex items-center gap-2 px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-t-md">
+            <IoSettingsOutline className="w-5 h-5" />
+            Account Settings
+          </Link>
+          <button
+            onClick={() => signOut()}
+            className="w-full flex items-center gap-2 text-left px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-b-md"
+          >
+            <FiLogOut className="w-5 h-5" />
+            Logout
+          </button>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="hidden md:flex items-center space-x-8 w-full justify-between h-16 md:h-20">

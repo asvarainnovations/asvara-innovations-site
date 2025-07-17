@@ -15,6 +15,13 @@ interface SessionWithUser extends Session {
   }
 }
 
+type UserWithId = {
+  id: string;
+  email?: string | null;
+  name?: string | null;
+  image?: string | null;
+};
+
 // DELETE /api/api-keys/[id] - Delete an API key
 export async function DELETE(
   request: Request,
@@ -22,9 +29,9 @@ export async function DELETE(
 ): Promise<NextResponse> {
   try {
     const { id } = await context.params;
-    const session = await getServerSession(authOptions) as SessionWithUser;
-
-    if (!session?.user?.id) {
+    const session = await getServerSession(authOptions);
+    const user = session?.user as UserWithId | undefined;
+    if (!user?.id) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -38,7 +45,7 @@ export async function DELETE(
       return new NextResponse("API key not found", { status: 404 });
     }
 
-    if (apiKey.userId !== session.user.id) {
+    if (apiKey.userId !== user.id) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 

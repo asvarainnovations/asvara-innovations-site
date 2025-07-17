@@ -1,5 +1,4 @@
 node_modules
-.next
 .git
 .gitignore
 docker-compose.yml
@@ -12,3 +11,7 @@ coverage
 *.md 
 !prisma/
 !prisma/schema.prisma 
+!components/
+!components/** 
+!.next
+!.next/static 

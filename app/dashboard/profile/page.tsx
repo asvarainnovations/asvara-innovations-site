@@ -5,8 +5,17 @@ import { useState } from "react";
 import Image from "next/image";
 import axiosInstance from '@/lib/axios';
 
+type UserWithRole = {
+  id: string;
+  role?: string;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+};
+
 export default function Profile() {
   const { data: session, update } = useSession();
+  const user = session?.user as UserWithRole | undefined;
   const [formData, setFormData] = useState({
     fullName: session?.user?.name || "",
     email: session?.user?.email || "",
@@ -140,7 +149,7 @@ export default function Profile() {
               <div>
                 <p className="text-sm font-medium text-gray-300">Account Type</p>
                 <p className="mt-1 text-sm text-white">
-                  {session?.user?.role === "ADMIN" ? "Administrator" : "Standard User"}
+                  {user?.role === "ADMIN" ? "Administrator" : "Standard User"}
                 </p>
               </div>
               <div>
