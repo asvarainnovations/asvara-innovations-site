@@ -192,3 +192,33 @@ If both scripts complete successfully, your database connection and seeding are 
 - `GET /api/admin/blog-submissions` — Get all blog submissions (admin)
 - `POST /api/admin/blog-submissions/moderate` — Approve/reject a submission (admin)
 - `DELETE /api/admin/blog-submissions/:id` — Delete a submission (admin)
+
+## Production Build & Deploy to Cloud Run
+
+Follow these steps to build and deploy your app to Google Cloud Run:
+
+1. **Clean your environment:**
+   ```sh
+   rm -rf .next node_modules package-lock.json
+   npm install
+   ```
+2. **Build the Next.js app:**
+   ```sh
+   npm run build
+   ```
+3. **Submit the build to Google Cloud Build:**
+   ```sh
+   gcloud builds submit --config cloudbuild.yaml
+   ```
+4. **(Optional) Test locally with Docker:**
+   ```sh
+   docker build --no-cache -t your-image-name .
+   docker run -p 8080:8080 your-image-name
+   ```
+5. **Deploy to Cloud Run (if not automated):**
+   ```sh
+   gcloud run deploy --image asia-south1-docker.pkg.dev/utopian-pride-462008-j4/cloud-run-source-deploy/asvara-innovations-site:latest --region asia-south1 --platform managed --allow-unauthenticated
+   ```
+   *(Update the image URL if your repo or region is different.)*
+
+**Note:** Ensure `.dockerignore` and `.gcloudignore` do NOT exclude `.next` and `.next/static` (add `!.next` and `!.next/static` if needed) to avoid missing CSS/static assets in production.
