@@ -17,8 +17,6 @@ const nextConfig = {
     config.resolve.alias['@'] = path.resolve(__dirname);
     return config;
   },
-
-  reactStrictMode: true,
 };
 
 module.exports = nextConfig;
