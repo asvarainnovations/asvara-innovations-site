@@ -1,4 +1,5 @@
 "use client";
+
 export const dynamic = "force-dynamic";
 
 import { useState, useRef } from "react";
@@ -52,6 +53,7 @@ const initialForm: FormState = {
   cover: "",
 };
 
+// Remove zod validation for resume (optional, or keep as a runtime check in handleSubmit)
 const formSchema = z.object({
   name: z.string().min(1, "Full name is required."),
   email: z.string().min(1, "Email is required.").email("Invalid email."),
@@ -59,17 +61,6 @@ const formSchema = z.object({
   position: z.string(),
   linkedin: z.string().optional(),
   portfolio: z.string().optional(),
-  resume: z
-    .instanceof(File)
-    .refine(
-      (file) =>
-        file && [
-          "application/pdf",
-          "application/msword",
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        ].includes(file.type),
-      { message: "PDF or DOC only." }
-    ),
   cover: z.string().optional(),
 });
 
@@ -239,16 +230,6 @@ export default function CareersPage() {
                 />
               </div>
               {/* Resume Upload */}
-              <div>
-                <label className="block text-[#F5F5F5] text-[0.875rem] font-medium uppercase mb-1 tracking-wide" htmlFor="resume">Resume (PDF/DOC) *</label>
-                <input
-                  className={`w-full bg-[#18181b] border ${errors.resume && touched.resume ? 'border-red-500' : 'border-[#A6A6A6]/30'} rounded-md px-4 py-2 text-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#2979FF] transition-shadow text-base file:bg-[#2979FF] file:text-white file:font-semibold file:rounded file:px-4 file:py-2 file:border-0`}
-                  type="file" name="resume" id="resume" accept=".pdf,.doc,.docx" onChange={handleChange} onBlur={handleBlur} ref={fileInput}
-                />
-                <div className="h-5 mt-1 text-xs">
-                  {touched.resume && errors.resume ? <span className="text-red-500">{errors.resume}</span> : <span className="text-[#A6A6A6]">&nbsp;</span>}
-                </div>
-              </div>
               {/* Cover Letter */}
               <div>
                 <label className="block text-[#F5F5F5] text-[0.875rem] font-medium uppercase mb-1 tracking-wide" htmlFor="cover">Cover Letter</label>
