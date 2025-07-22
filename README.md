@@ -221,4 +221,30 @@ Follow these steps to build and deploy your app to Google Cloud Run:
    ```
    *(Update the image URL if your repo or region is different.)*
 
-**Note:** Ensure `.dockerignore` and `.gcloudignore` do NOT exclude `.next` and `.next/static` (add `!.next` and `!.next/static` if needed) to avoid missing CSS/static assets in production.
+---
+
+## Troubleshooting: No Styling in Production
+
+If your production deployment is missing all CSS/styling, check the following:
+
+- **.dockerignore and .gcloudignore**: Ensure these files do NOT exclude `.next`, `.next/static`, `public`, or any CSS files. You should have:
+  ```
+  !.next
+  !.next/static
+  !public
+  ```
+- **Dockerfile**: Make sure your Dockerfile copies `.next`, `.next/static`, `public`, and `node_modules` from the build stage to the final image.
+- **Cloud Build**: Use a `cloudbuild.yaml` that builds and pushes your Docker image using your Dockerfile, not the default Cloud Run source deploy. Example:
+  ```yaml
+  steps:
+    - name: 'gcr.io/cloud-builders/docker'
+      args: ['build', '--no-cache', '-t', 'asia-south1-docker.pkg.dev/utopian-pride-462008-j4/cloud-run-source-deploy/asvara-innovations-site:latest', '.']
+    - name: 'gcr.io/cloud-builders/docker'
+      args: ['push', 'asia-south1-docker.pkg.dev/utopian-pride-462008-j4/cloud-run-source-deploy/asvara-innovations-site:latest']
+  images:
+    - 'asia-south1-docker.pkg.dev/utopian-pride-462008-j4/cloud-run-source-deploy/asvara-innovations-site:latest'
+  ```
+- **Deploy using the built image**: Deploy to Cloud Run using the image you just built and pushed, not the default source deploy.
+- **Check Cloud Build logs**: Ensure `.next/static` and CSS files are present in the final image.
+
+If you cannot build Docker images locally, always use Cloud Build with your own Dockerfile and deploy the resulting image.

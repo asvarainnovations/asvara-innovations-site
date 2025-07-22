@@ -4,6 +4,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Force new CSS build - styling fix for production - v2 */
+
 :root {
   --primary: #1C3D5A;
   --secondary: #FFFFFF;
@@ -86,4 +88,10 @@
 .custom-scrollbar::-webkit-scrollbar-track {
   background: #18181b;
   border-radius: 6px;
+}
+
+/* Force new build - additional styles */
+.force-new-build {
+  /* This class forces a new CSS hash */
+  display: block;
 }
