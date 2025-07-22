@@ -2,7 +2,11 @@ const path = require('path');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   reactStrictMode: true,
+  compiler: {
+    styledComponents: true,
+  },
   
   // Force new CSS build with timestamp
   generateBuildId: async () => {
