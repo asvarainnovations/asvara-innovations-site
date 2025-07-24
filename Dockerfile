@@ -26,12 +26,10 @@ ENV NODE_ENV production
 # Add a non-root user to run the app
 RUN addgroup --gid 1001 nodejs && adduser --uid 1001 --gid 1001 --disabled-password nextjs
 
+# Copy the standalone server and static assets
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/.env .env
+COPY --from=builder /app/.next/standalone ./ 
+COPY --from=builder /app/.next/static ./.next/static
 
 # Create cache directories and set proper permissions
 RUN mkdir -p /app/.next/cache && chown -R nextjs:nodejs /app/.next
@@ -42,4 +40,5 @@ USER nextjs
 ENV PORT 8080
 EXPOSE 8080
 
-CMD ["npx", "next", "start"]
+# Run the standalone server
+CMD ["node", "server.js"]
