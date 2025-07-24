@@ -59,8 +59,6 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
-import StyledComponentsRegistry from "./lib/StyledComponentsRegistry";
-
 export default function RootLayout({
   children,
 }: {
@@ -75,12 +73,10 @@ export default function RootLayout({
         <link rel="icon" href="/android-chrome-192x192.png" type="image/png" />
       </head>
       <body className="font-inter bg-black force-new-build">
-        <StyledComponentsRegistry>
-          <Providers>
-            <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
-            <Toaster richColors position="top-center" />
-          </Providers>
-        </StyledComponentsRegistry>
+        <Providers>
+          <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
+          <Toaster richColors position="top-center" />
+        </Providers>
       </body>
     </html>
   );
