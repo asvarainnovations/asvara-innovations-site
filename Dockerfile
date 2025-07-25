@@ -1,13 +1,13 @@
 # Install dependencies only when needed
-FROM node:18 AS deps
+FROM node:20-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json* pnpm-lock.yaml* yarn.lock* ./
 COPY prisma ./prisma
 ENV NODE_ENV=development
-RUN npm ci --unsafe-perm --jobs=1
+RUN npm install
 
 # Rebuild the source code only when needed
-FROM node:18 AS builder
+FROM node:20-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -19,17 +19,19 @@ RUN npx prisma generate
 RUN npm run build
 
 # Production image, copy all files and run next
-FROM node:18 AS runner
+FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV production
 
 # Add a non-root user to run the app
-RUN addgroup --gid 1001 nodejs && adduser --uid 1001 --gid 1001 --disabled-password nextjs
+RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
 
-# Copy the standalone server and static assets
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./ 
-COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/.env .env
 
 # Create cache directories and set proper permissions
 RUN mkdir -p /app/.next/cache && chown -R nextjs:nodejs /app/.next
@@ -40,5 +42,4 @@ USER nextjs
 ENV PORT 8080
 EXPOSE 8080
 
-# Run the standalone server
-CMD ["node", "server.js"]
+CMD ["npx", "next", "start"]
