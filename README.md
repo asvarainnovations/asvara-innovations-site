@@ -252,3 +252,22 @@ If your production deployment is missing all CSS/styling, check the following:
 - **Check Cloud Build logs**: Ensure `.next/static` and CSS files are present in the final image.
 
 If you cannot build Docker images locally, always use Cloud Build with your own Dockerfile and deploy the resulting image.
+
+## Deploying via Google Cloud Shell (Recommended for Windows Users)
+
+If you cannot build Docker images locally (e.g., on Windows without Docker Desktop), you can use Google Cloud Shell to build and deploy your app. Here are the steps:
+
+| Step | Command/Action                                                                                  |
+|------|-----------------------------------------------------------------------------------------------|
+| 1    | Open [Google Cloud Shell](https://console.cloud.google.com/)                                   |
+| 2    | `git clone <YOUR_REPO_URL> && cd <YOUR_PROJECT_DIRECTORY>`                                     |
+| 3    | `gcloud auth configure-docker asia-south1-docker.pkg.dev`                                      |
+| 4    | `docker build -t asia-south1-docker.pkg.dev/utopian-pride-462008-j4/cloud-run-source-deploy/asvara-innovations-site:latest .` |
+| 5    | `docker push asia-south1-docker.pkg.dev/utopian-pride-462008-j4/cloud-run-source-deploy/asvara-innovations-site:latest`        |
+| 6    | `gcloud run deploy --image asia-south1-docker.pkg.dev/utopian-pride-462008-j4/cloud-run-source-deploy/asvara-innovations-site:latest --region asia-south1 --platform managed --allow-unauthenticated` |
+
+**Notes:**
+- Replace `<YOUR_REPO_URL>` and `<YOUR_PROJECT_DIRECTORY>` with your actual repository URL and directory name.
+- Make sure you have your `.env.production` file in the project root before building.
+- The `gcloud run deploy` command will prompt you for service name and other options if not specified.
+- This method avoids Windows Docker issues and ensures a consistent Linux build environment.
