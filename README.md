@@ -217,7 +217,7 @@ Follow these steps to build and deploy your app to Google Cloud Run:
    ```
 5. **Push your Docker image to Google Container Registry (GCR):**
    ```sh
-   docker push gcr.io/utopian-pride-462088-j4/asvara-innovations-site:latest
+   docker push gcr.io/utopian-pride-462008-j4/asvara-innovations-site:latest
    ```
 6. **Deploy to Cloud Run (if not automated):**
    ```sh

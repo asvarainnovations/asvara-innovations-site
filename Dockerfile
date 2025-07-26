@@ -21,7 +21,7 @@ RUN npm run build
 # Production image, copy all files and run next
 FROM node:20-alpine AS runner
 WORKDIR /app
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 # Add a non-root user to run the app
 RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
