@@ -6,7 +6,7 @@ RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists
 COPY package.json package-lock.json* pnpm-lock.yaml* yarn.lock* ./
 COPY prisma ./prisma
 ENV NODE_ENV=development
-RUN npm install
+RUN npm ci
 
 # Rebuild the source code only when needed
 FROM node:20-slim AS builder
