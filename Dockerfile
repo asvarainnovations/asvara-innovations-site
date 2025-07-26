@@ -1,6 +1,8 @@
 # Install dependencies only when needed
 FROM node:20-slim AS deps
 WORKDIR /app
+# Install OpenSSL for Prisma
+RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 COPY package.json package-lock.json* pnpm-lock.yaml* yarn.lock* ./
 COPY prisma ./prisma
 ENV NODE_ENV=development
@@ -9,6 +11,8 @@ RUN npm install
 # Rebuild the source code only when needed
 FROM node:20-slim AS builder
 WORKDIR /app
+# Install OpenSSL for Prisma
+RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 COPY .env.production .env
@@ -22,6 +26,9 @@ RUN npm run build
 FROM node:20-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
+
+# Install OpenSSL for Prisma runtime
+RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 
 # Add a non-root user to run the app
 RUN addgroup --gid 1001 nodejs && adduser --uid 1001 --gid 1001 --disabled-password nextjs
