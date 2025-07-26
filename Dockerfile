@@ -1,5 +1,5 @@
 # Install dependencies only when needed
-FROM node:20-alpine AS deps
+FROM node:20-slim AS deps
 WORKDIR /app
 COPY package.json package-lock.json* pnpm-lock.yaml* yarn.lock* ./
 COPY prisma ./prisma
@@ -7,19 +7,19 @@ ENV NODE_ENV=development
 RUN npm install
 
 # Rebuild the source code only when needed
-FROM node:20-alpine AS builder
+FROM node:20-slim AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 COPY .env.production .env
 ENV NODE_ENV=production
-# Generate Prisma client (for debian-openssl-1.1.x)
+# Generate Prisma client (for debian-openssl-3.0.x)
 RUN npx prisma generate
 # Build Next.js app
 RUN npm run build
 
 # Production image, copy all files and run next
-FROM node:20-alpine AS runner
+FROM node:20-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
@@ -39,7 +39,7 @@ RUN mkdir -p /app/.next/cache && chown -R nextjs:nodejs /app/.next
 USER nextjs
 
 # Cloud Run expects the app to listen on $PORT
-ENV PORT 8080
+ENV PORT=8080
 EXPOSE 8080
 
 CMD ["npx", "next", "start"]
