@@ -24,7 +24,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # Add a non-root user to run the app
-RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
+RUN addgroup --gid 1001 nodejs && adduser --uid 1001 --gid 1001 --disabled-password nextjs
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
