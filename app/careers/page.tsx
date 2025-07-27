@@ -8,6 +8,7 @@ import { CheckCircle, Users, Brain, BookOpen, Clock, ChevronDown, ChevronUp, Spa
 import { z } from "zod";
 import { toast } from "sonner";
 import Footer from "../components/Footer";
+import ResumeUpload from "./ResumeUpload";
 import axios from '@/lib/axios';
 
 const culturePoints = [
@@ -230,6 +231,11 @@ export default function CareersPage() {
                 />
               </div>
               {/* Resume Upload */}
+              <ResumeUpload 
+                onChange={handleChange}
+                error={errors.resume}
+                touched={touched.resume}
+              />
               {/* Cover Letter */}
               <div>
                 <label className="block text-[#F5F5F5] text-[0.875rem] font-medium uppercase mb-1 tracking-wide" htmlFor="cover">Cover Letter</label>
