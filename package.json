@@ -12,7 +12,12 @@
     "db:seed": "prisma db seed",
     "migrate:gcp": "node scripts/migrate-to-gcp.js",
     "test:db": "node scripts/test-db-connection.js",
-    "test:db:seed": "node scripts/test-db-seed.js"
+    "test:db:seed": "node scripts/test-db-seed.js",
+    "prisma:generate": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate dev --create-only",
+    "prisma:deploy": "npx prisma migrate deploy",
+    "prisma:status": "npx prisma migrate status",
+    "prisma:studio": "npx prisma studio"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"

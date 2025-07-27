@@ -127,6 +127,52 @@ npm run test:db:seed
 
 If both scripts complete successfully, your database connection and seeding are working!
 
+## Production Deployment Architecture
+
+### VPC Connector Setup (Required for Cloud SQL Private IP Access)
+
+To enable Cloud Run to access Cloud SQL via private IP, you need to set up a VPC connector:
+
+1. **Create VPC Connector:**
+   ```bash
+   gcloud compute networks vpc-access connectors create asvara-connector \
+     --region=asia-south1 \
+     --range=10.8.0.0/28 \
+     --network=default \
+     --min-instances=2 \
+     --max-instances=10 \
+     --machine-type=e2-micro
+   ```
+
+2. **Configure Cloud Run VPC Access:**
+   - Go to Cloud Run Console → Your Service → Edit & Deploy New Revision
+   - Under "Networking" section, select "Use Serverless VPC Access connectors"
+   - Choose your `asvara-connector` from the dropdown
+   - Set "Traffic routing" to "Route all traffic to the VPC"
+   - Deploy the new revision
+
+3. **Database URL Format:**
+   ```
+   DATABASE_URL=postgresql://username:password@PRIVATE_IP:5432/database?schema=public
+   ```
+   Example: `postgresql://asvara_user:password@172.25.160.3:5432/asvara_db?schema=public`
+
+### Production Environment Variables
+
+Set these in your Cloud Run service:
+
+```env
+DATABASE_URL=postgresql://username:password@PRIVATE_IP:5432/database?schema=public
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+NEXTAUTH_URL=https://your-domain.com
+NEXTAUTH_SECRET=your_random_secret_key
+GCP_BLOG_IMAGES_BUCKET=asvara-blog-images
+GCP_BLOG_ATTACHMENTS_BUCKET=asvara-blog-attachments
+GCP_RESUMES_BUCKET=asvara-resumes
+GCP_GENERAL_BUCKET=asvara-general
+```
+
 ## Progress
 
 ### ✅ Completed
@@ -139,7 +185,8 @@ If both scripts complete successfully, your database connection and seeding are 
     - Resumes are stored privately with signed URL access only.
     - File deletion logic for blogs and careers is implemented (removes files from GCP on delete).
 - **Environment Variables**: Secure handling for local and production, with Cloud Run using built-in service account and `.env.production` for build-time config.
-- **Docker & Cloud Run**: Production-ready Dockerfile, build, push, and deploy flow to Cloud Run.
+- **Docker & Cloud Run**: Production-ready Dockerfile with OpenSSL support, build, push, and deploy flow to Cloud Run.
+- **VPC & Networking**: VPC connector setup for secure Cloud SQL private IP access.
 - **Blog System**:
   - Complete blog submission flow with cover image and file attachments.
   - Admin moderation dashboard to review, approve, and reject submissions.
@@ -154,9 +201,13 @@ If both scripts complete successfully, your database connection and seeding are 
   - Polished "Problem/Solution" section.
   - Added "About Us" page.
   - Footer updated with Font Awesome icons and correct social links.
-- **Troubleshooting & Security**:
-  - Cloud SQL authorized networks and GCP permissions configured.
-  - Prisma/OpenSSL and GCP key file logic fixed for production.
+- **Production Issues Resolved**:
+  - ✅ OpenSSL installation in Docker for Prisma compatibility
+  - ✅ Prisma client generation and import errors fixed
+  - ✅ Database connection with proper DATABASE_URL format
+  - ✅ VPC connector setup for Cloud SQL private IP access
+  - ✅ CSS styling working correctly in production
+  - ✅ All backend APIs functioning properly
 
 ### 🚧 TODO / In Progress
 - **/api/auth/login**: Issue JWT or session token after successful login (currently only returns user info).
@@ -227,31 +278,56 @@ Follow these steps to build and deploy your app to Google Cloud Run:
 
 ---
 
-## Troubleshooting: No Styling in Production
+## Troubleshooting: Production Issues
 
-If your production deployment is missing all CSS/styling, check the following:
+### Database Connection Issues
 
-- **.dockerignore and .gcloudignore**: Ensure these files do NOT exclude `.next`, `.next/static`, `public`, or any CSS files. You should have:
-  ```
-  !.next
-  !.next/static
-  !public
-  ```
-- **Dockerfile**: Make sure your Dockerfile copies `.next`, `.next/static`, `public`, and `node_modules` from the build stage to the final image.
-- **Cloud Build**: Use a `cloudbuild.yaml` that builds and pushes your Docker image using your Dockerfile, not the default Cloud Run source deploy. Example:
-  ```yaml
-  steps:
-    - name: 'gcr.io/cloud-builders/docker'
-      args: ['build', '--no-cache', '-t', 'asia-south1-docker.pkg.dev/utopian-pride-462008-j4/cloud-run-source-deploy/asvara-innovations-site:latest', '.']
-    - name: 'gcr.io/cloud-builders/docker'
-      args: ['push', 'asia-south1-docker.pkg.dev/utopian-pride-462008-j4/cloud-run-source-deploy/asvara-innovations-site:latest']
-  images:
-    - 'asia-south1-docker.pkg.dev/utopian-pride-462008-j4/cloud-run-source-deploy/asvara-innovations-site:latest'
-  ```
-- **Deploy using the built image**: Deploy to Cloud Run using the image you just built and pushed, not the default source deploy.
-- **Check Cloud Build logs**: Ensure `.next/static` and CSS files are present in the final image.
+If you encounter "empty host in database URL" or "Can't reach database server" errors:
 
-If you cannot build Docker images locally, always use Cloud Build with your own Dockerfile and deploy the resulting image.
+1. **Verify DATABASE_URL format:**
+   ```
+   postgresql://username:password@PRIVATE_IP:5432/database?schema=public
+   ```
+
+2. **Check VPC Connector setup:**
+   - Ensure VPC connector is created and running
+   - Verify Cloud Run is configured to use the connector
+   - Check that "Route all traffic to the VPC" is selected
+
+3. **Get Cloud SQL Private IP:**
+   ```bash
+   gcloud sql instances describe YOUR_INSTANCE_NAME --format="value(ipAddresses[0].ipAddress)"
+   ```
+
+### Prisma Issues
+
+If Prisma fails to initialize or generate client:
+
+1. **Install OpenSSL in Docker:**
+   ```dockerfile
+   RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+   ```
+
+2. **Generate Prisma client:**
+   ```bash
+   npx prisma generate
+   ```
+
+3. **Check environment variables:**
+   - Ensure `DATABASE_URL` is properly set
+   - Verify `NODE_ENV=production` in production
+
+### CSS/Styling Issues
+
+If CSS is missing in production:
+
+1. **Check Dockerfile:**
+   - Ensure `.next/static` is copied to the final image
+   - Verify `NODE_ENV=production` is set during build
+
+2. **Verify next.config.js:**
+   - Ensure `output: 'standalone'` is configured
+   - Check that no custom webpack configurations are interfering
 
 ## Deploying via Google Cloud Shell (Recommended for Windows Users)
 
