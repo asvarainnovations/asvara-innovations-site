@@ -37,7 +37,14 @@ export async function GET(req: NextRequest) {
     const postsWithUrls = await Promise.all(blogPosts.map(async (post) => {
       let coverImage = null;
       if (post.coverImage) {
-        coverImage = getPublicUrl(BUCKETS.BLOG_IMAGES, post.coverImage);
+        // Check if it's a local path (starts with /) or a GCS path
+        if (post.coverImage.startsWith('/')) {
+          // Local path - use as is
+          coverImage = post.coverImage;
+        } else {
+          // GCS path - convert to public URL
+          coverImage = getPublicUrl(BUCKETS.BLOG_IMAGES, post.coverImage);
+        }
       }
       // If you have attachments, add similar logic here
       return {

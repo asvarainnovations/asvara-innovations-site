@@ -27,8 +27,8 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
       return NextResponse.json({
         blog: {
           ...blog,
-          coverImage,
-          attachments,
+          coverImage: null,
+          attachments: [],
         },
       });
     }
@@ -51,8 +51,8 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
       return NextResponse.json({
         blog: {
           ...submission,
-          coverImage,
-          attachments,
+          coverImage: null,
+          attachments: [],
         },
       });
     }

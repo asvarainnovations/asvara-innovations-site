@@ -16,7 +16,7 @@ RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 COPY .env.production .env
-ENV NODE_ENV=production
+ENV NODE_ENV=production 
 # Generate Prisma client (for debian-openssl-3.0.x)
 RUN npx prisma generate
 # Build Next.js app
