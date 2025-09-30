@@ -64,17 +64,17 @@ export default function SignIn() {
       </div>
 
       {/* Right side - Login Form */}
-      <div className="flex w-full items-center justify-center bg-gray-900 p-8 lg:w-1/2">
+      <div className="flex w-full items-center justify-center bg-white p-8 lg:w-1/2">
         <div className="w-full max-w-md">
           <div className="mb-8 text-center">
-            <h2 className="mb-2 text-3xl font-bold text-white">Sign In</h2>
-            <p className="text-gray-300">Welcome back! Please sign in to continue.</p>
+            <h2 className="mb-2 text-3xl font-bold text-gray-900">Sign In</h2>
+            <p className="text-gray-600">Welcome back! Please sign in to continue.</p>
           </div>
 
           {/* Google Sign In Button */}
           <button
             onClick={handleGoogleSignIn}
-            className="mb-6 flex w-full items-center justify-center rounded-md border border-gray-600 bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+            className="mb-6 flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white"
           >
             <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
               <path
@@ -99,20 +99,20 @@ export default function SignIn() {
 
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-600" />
+              <div className="w-full border-t border-gray-300" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="bg-gray-900 px-2 text-gray-400">Or continue with</span>
+              <span className="bg-white px-2 text-gray-500">Or continue with</span>
             </div>
           </div>
 
           <div className="mb-6">
-            <div className="flex rounded-lg border border-gray-600 p-1">
+            <div className="flex rounded-lg border border-gray-300 p-1">
               <button
                 className={`flex-1 rounded-md px-4 py-2 text-sm font-medium ${
                   loginMethod === "email"
                     ? "bg-blue-600 text-white"
-                    : "text-gray-300 hover:bg-gray-700"
+                    : "text-gray-600 hover:bg-gray-100"
                 }`}
                 onClick={() => setLoginMethod("email")}
               >
@@ -122,7 +122,7 @@ export default function SignIn() {
                 className={`flex-1 rounded-md px-4 py-2 text-sm font-medium ${
                   loginMethod === "phone"
                     ? "bg-blue-600 text-white"
-                    : "text-gray-300 hover:bg-gray-700"
+                    : "text-gray-600 hover:bg-gray-100"
                 }`}
                 onClick={() => setLoginMethod("phone")}
               >
@@ -134,7 +134,7 @@ export default function SignIn() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {loginMethod === "email" ? (
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-300">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email
                 </label>
                 <input
@@ -142,13 +142,13 @@ export default function SignIn() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-black shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   required
                 />
               </div>
             ) : (
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-300">
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                   Phone Number
                 </label>
                 <input
@@ -156,14 +156,14 @@ export default function SignIn() {
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-black shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   required
                 />
               </div>
             )}
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
               </label>
               <input
@@ -171,30 +171,30 @@ export default function SignIn() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-black shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 required
               />
             </div>
 
             {error && (
-              <div className="rounded-md bg-red-900/50 border border-red-500 p-4">
-                <p className="text-sm text-red-300">{error}</p>
+              <div className="rounded-md bg-red-50 border border-red-200 p-4">
+                <p className="text-sm text-red-600">{error}</p>
               </div>
             )}
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50"
+              className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white disabled:opacity-50"
             >
               {loading ? "Signing in..." : "Sign In"}
             </button>
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-gray-600">
               Don't have an account?{" "}
-              <a href="/auth/register" className="font-medium text-blue-400 hover:text-blue-300">
+              <a href="/auth/register" className="font-medium text-blue-600 hover:text-blue-500">
                 Sign up
               </a>
             </p>
