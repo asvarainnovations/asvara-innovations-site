@@ -51,20 +51,20 @@ function LoggedInHero({ logoRef, startFade }: { logoRef: React.RefObject<HTMLDiv
         </p>
         {/* Service Buttons: stack vertically on mobile, row on md+ */}
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-12 mt-4 sm:mt-8 justify-center items-center">
-          {/* <button
+          <button
             type="button"
             onClick={() => window.open("https://pleadsmart.asvarainnovation.com", "_blank", "noopener,noreferrer")}
-            className="inline-flex items-center justify-center rounded-md bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="inline-flex items-center justify-center rounded-md bg-blue-600 px-12 py-2 text-lg font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             PleadSmart
-          </button> */}
-          <button
+          </button>
+          {/* <button
             type="button"
             onClick={() => window.open("https://docbare.asvarainnovation.com", "_blank", "noopener,noreferrer")}
             className="inline-flex items-center justify-center rounded-md bg-blue-600 px-12 py-2 text-lg font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             DocBare
-          </button>
+          </button> */}
           <button
             type="button"
             onClick={() => window.open("https://aicourt.asvarainnovation.com", "_blank", "noopener,noreferrer")}
