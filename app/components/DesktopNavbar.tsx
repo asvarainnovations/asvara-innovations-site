@@ -78,7 +78,7 @@ export default function DesktopNavbar() {
         {/* <Link href="/contact" className="text-white hover:text-accent transition-colors">
           Contact
         </Link> */}
-        {session?.user ? (
+        {/* {session?.user ? (
           <AvatarDropdown />
         ) : (
           <div className="flex items-center space-x-4">
@@ -95,7 +95,7 @@ export default function DesktopNavbar() {
               Signup
             </Link>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

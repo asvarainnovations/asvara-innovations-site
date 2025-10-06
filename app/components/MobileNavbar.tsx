@@ -118,7 +118,7 @@ export default function MobileNavbar({ isMobileMenuOpen, setIsMobileMenuOpen }: 
               >
                 Contact
               </Link> */}
-              {session?.user ? (
+              {/* {session?.user ? (
                 <div className="pt-2">
                   <AvatarDropdown />
                 </div>
@@ -139,7 +139,7 @@ export default function MobileNavbar({ isMobileMenuOpen, setIsMobileMenuOpen }: 
                     Signup
                   </Link>
                 </div>
-              )}
+              )} */}
             </div>
           </motion.div>
         )}
