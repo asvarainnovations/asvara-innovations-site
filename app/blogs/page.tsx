@@ -28,7 +28,7 @@ export default function BlogsPage() {
       {/* Header */}
       <div className="bg-[#181c24] border-b border-accent/10">
         <div className="max-w-6xl mx-auto px-4 py-12">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mt-10">
             <div>
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
                 Blog

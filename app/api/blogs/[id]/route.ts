@@ -18,7 +18,17 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     if (blog) {
       let coverImage = null;
       if (blog.coverImage) {
-        coverImage = getPublicUrl(BUCKETS.BLOG_IMAGES, blog.coverImage);
+        // Check if it's already a full URL or a local path
+        if (blog.coverImage.startsWith('http')) {
+          // Already a full URL - use as is
+          coverImage = blog.coverImage;
+        } else if (blog.coverImage.startsWith('/')) {
+          // Local path - use as is
+          coverImage = blog.coverImage;
+        } else {
+          // GCS path - convert to public URL
+          coverImage = getPublicUrl(BUCKETS.BLOG_IMAGES, blog.coverImage);
+        }
       }
       const attachments = (blog.attachments || []).map(a => ({
         ...a,
@@ -27,8 +37,8 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
       return NextResponse.json({
         blog: {
           ...blog,
-          coverImage: null,
-          attachments: [],
+          coverImage,
+          attachments,
         },
       });
     }
@@ -42,7 +52,17 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     if (submission) {
       let coverImage = null;
       if (submission.coverImage) {
-        coverImage = getPublicUrl(BUCKETS.BLOG_IMAGES, submission.coverImage);
+        // Check if it's already a full URL or a local path
+        if (submission.coverImage.startsWith('http')) {
+          // Already a full URL - use as is
+          coverImage = submission.coverImage;
+        } else if (submission.coverImage.startsWith('/')) {
+          // Local path - use as is
+          coverImage = submission.coverImage;
+        } else {
+          // GCS path - convert to public URL
+          coverImage = getPublicUrl(BUCKETS.BLOG_IMAGES, submission.coverImage);
+        }
       }
       const attachments = (submission.attachments || []).map(a => ({
         ...a,
@@ -51,8 +71,8 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
       return NextResponse.json({
         blog: {
           ...submission,
-          coverImage: null,
-          attachments: [],
+          coverImage,
+          attachments,
         },
       });
     }

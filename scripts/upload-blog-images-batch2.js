@@ -14,7 +14,7 @@ async function uploadBlogImages() {
   try {
     const bucket = storage.bucket(bucketName);
     
-    // Define the images to upload
+    // Define the images to upload - cover image for all blogs
     const images = [
       {
         localPath: './blog-images/cover-image.png',
@@ -23,7 +23,7 @@ async function uploadBlogImages() {
       }
     ];
 
-    console.log('🚀 Starting image uploads...');
+    console.log('🚀 Starting image uploads for batch 2 blogs...');
 
     for (const image of images) {
       try {
@@ -61,32 +61,16 @@ async function uploadBlogImages() {
   }
 }
 
-// Create a cover image placeholder if needed
-async function createCoverImage() {
-  try {
-    const bucket = storage.bucket(bucketName);
-    
-    // Create a simple cover image using Canvas (if available)
-    // For now, we'll use a placeholder approach
-    console.log('📝 Note: You may want to create a custom cover image for the blog post');
-    console.log('💡 You can upload a cover image manually to: https://storage.googleapis.com/asvara-blog-images/women-political-backwardness-cover.jpg');
-    
-  } catch (error) {
-    console.error('❌ Error creating cover image:', error);
-  }
-}
-
 // Main execution
 async function main() {
-  console.log('📸 Blog Image Upload Script');
-  console.log('============================');
+  console.log('📸 Blog Image Upload Script - Batch 2');
+  console.log('=====================================');
   
   await uploadBlogImages();
-  await createCoverImage();
   
   console.log('\n📋 Next Steps:');
-  console.log('1. Run the blog creation script: node scripts/create-blog-post.js');
-  console.log('2. Check your blog at: /blogs');
+  console.log('1. Run the blog creation scripts for each blog');
+  console.log('2. Check your blogs at: /blogs');
   console.log('3. Verify images are displaying correctly');
 }
 

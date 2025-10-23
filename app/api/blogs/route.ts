@@ -37,8 +37,11 @@ export async function GET(req: NextRequest) {
     const postsWithUrls = await Promise.all(blogPosts.map(async (post) => {
       let coverImage = null;
       if (post.coverImage) {
-        // Check if it's a local path (starts with /) or a GCS path
-        if (post.coverImage.startsWith('/')) {
+        // Check if it's already a full URL or a local path
+        if (post.coverImage.startsWith('http')) {
+          // Already a full URL - use as is
+          coverImage = post.coverImage;
+        } else if (post.coverImage.startsWith('/')) {
           // Local path - use as is
           coverImage = post.coverImage;
         } else {

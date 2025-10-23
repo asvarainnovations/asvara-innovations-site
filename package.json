@@ -20,7 +20,23 @@
     "prisma:studio": "npx prisma studio",
     "blog:create": "node scripts/create-blog-post.js",
     "blog:upload-images": "node scripts/upload-blog-images.js",
-    "blog:publish": "npm run blog:upload-images && npm run blog:create"
+    "blog:publish": "npm run blog:upload-images && npm run blog:create",
+    "blog:upload-images-batch2": "node scripts/upload-blog-images-batch2.js",
+    "blog:upload-images-batch2-fixed": "node scripts/upload-blog-images-batch2-fixed.js",
+    "blog:upload-images-gcloud": "node scripts/upload-blog-images-gcloud-auth.js",
+    "blog:create-batch2": "node scripts/create-all-blogs-batch2.js",
+    "blog:create-proper": "node scripts/create-all-blogs-proper.js",
+    "blog:create-no-images": "node scripts/create-blogs-without-images.js",
+    "blog:publish-batch2": "npm run blog:upload-images-batch2 && npm run blog:create-batch2",
+    "blog:publish-proper": "npm run blog:upload-images-batch2 && npm run blog:create-proper",
+    "blog:delete-batch2": "node scripts/delete-batch2-blogs.js",
+    "blog:delete-batch2-confirm": "node scripts/delete-batch2-blogs.js --confirm",
+    "test:gcp-auth": "node scripts/test-gcp-auth.js",
+    "blog:update-cover-images": "node scripts/update-blog-cover-images.js",
+    "test:blog-api": "node scripts/test-blog-api.js",
+    "check:production-images": "node scripts/check-production-images.js",
+    "fix:bucket-permissions": "node scripts/fix-bucket-permissions.js",
+    "blog:update-to-local": "node scripts/update-cover-images-to-local.js"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
