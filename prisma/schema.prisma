@@ -198,6 +198,7 @@ model BlogPost {
   attachments   BlogAttachment[]
   author        BlogAuthor? @relation(fields: [authorId], references: [id])
   authorId      String?
+  publicationId String?     @unique
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   publishedAt   DateTime?

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/app/components/Button";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "next/navigation";
-import { ArrowLeft, Calendar, Clock, User, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, User, ExternalLink, Hash } from 'lucide-react';
 import axiosInstance from '@/lib/axios';
 import { calculateReadingTime, formatReadingTime } from '@/lib/utils';
 
@@ -33,6 +33,7 @@ export default function BlogDetailPage() {
               readTime: formatReadingTime(calculateReadingTime(data.blog.content)),
             content: data.blog.content,
             tags: data.blog.tags || [],
+            publicationId: data.blog.publicationId || null,
           });
           setLoading(false);
           return;
@@ -119,6 +120,14 @@ export default function BlogDetailPage() {
           
           {/* Meta Information */}
           <div className="flex flex-wrap items-center gap-6 text-gray-400 mb-8 pb-8 border-b border-gray-700">
+            {/* Publication ID */}
+            {post.publicationId && (
+              <div className="flex items-center gap-2">
+                <Hash size={16} />
+                <span className="text-white font-medium">Publication ID: {post.publicationId}</span>
+              </div>
+            )}
+            
             {/* Author */}
             <div className="flex items-center gap-2">
               <User size={16} />
@@ -214,13 +223,13 @@ export default function BlogDetailPage() {
               
               // Lists
               ul: ({ node, ...props }) => (
-                <ul {...props} className="list-disc list-inside text-gray-300 mb-6 space-y-2" />
+                <ul {...props} className="list-disc list-outside text-gray-300 mb-6 space-y-2 ml-6" />
               ),
               ol: ({ node, ...props }) => (
-                <ol {...props} className="list-decimal list-inside text-gray-300 mb-6 space-y-2" />
+                <ol {...props} className="list-decimal list-outside text-gray-300 mb-6 space-y-2 ml-6" />
               ),
               li: ({ node, ...props }) => (
-                <li {...props} className="text-lg" />
+                <li {...props} className="text-lg pl-2" />
               ),
               
               // Blockquotes

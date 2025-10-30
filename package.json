@@ -36,7 +36,10 @@
     "test:blog-api": "node scripts/test-blog-api.js",
     "check:production-images": "node scripts/check-production-images.js",
     "fix:bucket-permissions": "node scripts/fix-bucket-permissions.js",
-    "blog:update-to-local": "node scripts/update-cover-images-to-local.js"
+    "blog:update-to-local": "node scripts/update-cover-images-to-local.js",
+    "blog:update-dates": "node scripts/update-blog-dates.js",
+    "blog:update-content": "node scripts/update-blog-content.js",
+    "blog:update-comprehensive": "node scripts/update-blogs-comprehensive.js"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"

@@ -13,6 +13,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
       include: {
         author: true,
         attachments: true,
+        tags: true,
       },
     });
     if (blog) {
@@ -39,6 +40,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
           ...blog,
           coverImage,
           attachments,
+          tags: blog.tags?.map(tag => tag.name) || [],
         },
       });
     }

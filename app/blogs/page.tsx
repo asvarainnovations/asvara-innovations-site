@@ -2,18 +2,20 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/app/components/Button";
-import { Calendar, Clock, User, Plus } from 'lucide-react';
+import { Calendar, User, Plus, Search, Hash } from 'lucide-react';
 import axiosInstance from '@/lib/axios';
-import { calculateReadingTime, formatReadingTime } from '@/lib/utils';
 
 export default function BlogsPage() {
   const [blogs, setBlogs] = useState<any[]>([]);
+  const [allBlogs, setAllBlogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     axiosInstance.get("/api/blogs?published=true")
       .then((res) => {
+        setAllBlogs(res.data.blogs || []);
         setBlogs(res.data.blogs || []);
         setLoading(false);
       })
@@ -22,6 +24,25 @@ export default function BlogsPage() {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setBlogs(allBlogs);
+      return;
+    }
+
+    const query = searchQuery.toLowerCase().trim();
+    const filtered = allBlogs.filter((blog) => {
+      const matchesTitle = blog.title?.toLowerCase().includes(query);
+      const matchesAuthor = blog.authorName?.toLowerCase().includes(query);
+      const matchesPublicationId = blog.publicationId?.toLowerCase().includes(query);
+      const matchesExcerpt = blog.excerpt?.toLowerCase().includes(query);
+      
+      return matchesTitle || matchesAuthor || matchesPublicationId || matchesExcerpt;
+    });
+    
+    setBlogs(filtered);
+  }, [searchQuery, allBlogs]);
 
   return (
     <div className="min-h-screen bg-gray-900">
@@ -49,6 +70,28 @@ export default function BlogsPage() {
 
       {/* Content */}
       <div className="max-w-6xl mx-auto px-4 py-16">
+        {/* Search Bar */}
+        <div className="mb-8">
+          <div className="relative max-w-2xl mx-auto">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <input
+              type="text"
+              placeholder="Search by Publication ID, title, author, or content..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-[#181c24] border border-accent/20 rounded-lg text-white placeholder-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-none"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+        </div>
+
         {loading ? (
           <div className="text-center py-24">
             <div className="text-gray-300 text-xl">Loading articles...</div>
@@ -59,8 +102,17 @@ export default function BlogsPage() {
           </div>
         ) : blogs.length === 0 ? (
           <div className="text-center py-24">
-            <div className="text-gray-400 text-xl mb-4">No published articles yet.</div>
-            <p className="text-gray-500">Be the first to contribute!</p>
+            {searchQuery ? (
+              <>
+                <div className="text-gray-400 text-xl mb-4">No articles found matching "{searchQuery}"</div>
+                <p className="text-gray-500">Try searching with a different term</p>
+              </>
+            ) : (
+              <>
+                <div className="text-gray-400 text-xl mb-4">No published articles yet.</div>
+                <p className="text-gray-500">Be the first to contribute!</p>
+              </>
+            )}
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -103,17 +155,11 @@ export default function BlogsPage() {
                         {blog.authorName || "Anonymous"}
                       </span>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1">
-                        <Calendar size={14} />
-                        <span>
-                          {blog.publishedAt ? new Date(blog.publishedAt).toLocaleDateString() : ""}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Clock size={14} />
-                        <span>{blog.content ? formatReadingTime(calculateReadingTime(blog.content)) : "5 min read"}</span>
-                      </div>
+                    <div className="flex items-center gap-1">
+                      <Calendar size={14} />
+                      <span>
+                        {blog.publishedAt ? new Date(blog.publishedAt).toLocaleDateString() : ""}
+                      </span>
                     </div>
                   </div>
                 </div>

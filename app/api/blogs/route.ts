@@ -31,6 +31,10 @@ export async function GET(req: NextRequest) {
     const blogPosts = await prisma.blogPost.findMany({
       where: published ? { status: "PUBLISHED" } : undefined,
       orderBy: { createdAt: "desc" },
+      include: {
+        author: true,
+        tags: true,
+      },
     });
 
     // Add public URLs for coverImage and attachments if present
@@ -49,10 +53,12 @@ export async function GET(req: NextRequest) {
           coverImage = getPublicUrl(BUCKETS.BLOG_IMAGES, post.coverImage);
         }
       }
-      // If you have attachments, add similar logic here
+      // Map tags to array of strings and add author name
       return {
         ...post,
         coverImage,
+        authorName: post.author?.name || null,
+        tags: post.tags.map(tag => tag.name),
       };
     }));
 
